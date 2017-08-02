@@ -2,11 +2,16 @@
   <td><%=  stamp.name %></td>
   <td><%=  stamp.owner_id %></td>
   <td>
-    <%= link_to 'View', stamp_path(stamp), class: 'btn btn-default' %>
-    <%= link_to 'Edit', edit_stamp_path(stamp), class: 'btn btn-primary' %>
-    <%= link_to 'Delete', stamp_path(stamp),
-          method: :delete,
-          class: 'btn btn-danger',
-          data: { confirm: 'Are you sure you want to delete this stamp?' } %>
+    <!-- If the owner of the stamp is the current user -->
+    <% current_user = 'guest' %>
+    <% if stamp.owner_id == current_user %>
+      <%= link_to 'Edit', edit_stamp_path(stamp), class: 'btn btn-primary' %>
+      <%= link_to 'Delete', stamp_path(stamp),
+            method: :delete,
+            class: 'btn btn-danger',
+            data: { confirm: 'Are you sure you want to delete this stamp?' } %>
+    <% else %>
+      <%= link_to 'View', stamp_path(stamp), class: 'btn btn-default' %>
+    <% end %>
   </td>
 </tr>
