@@ -1,0 +1,11 @@
+<div class="row">
+  <div class="col-md-12">
+    <%= link_to 'Create New Stamp', new_stamp_url, class: 'btn btn-success vcenter' %>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <%= render "stamp_table", stamps: @stamps %>
+  </div>
+</div>
