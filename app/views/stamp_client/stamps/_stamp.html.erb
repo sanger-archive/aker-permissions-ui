@@ -1,0 +1,12 @@
+<tr>
+  <td><%=  stamp.name %></td>
+  <td><%=  stamp.owner_id %></td>
+  <td>
+    <%= link_to 'View', stamp_path(stamp), class: 'btn btn-default' %>
+    <%= link_to 'Edit', edit_stamp_path(stamp), class: 'btn btn-primary' %>
+    <%= link_to 'Delete', stamp_path(stamp),
+          method: :delete,
+          class: 'btn btn-danger',
+          data: { confirm: 'Are you sure you want to delete this stamp?' } %>
+  </td>
+</tr>

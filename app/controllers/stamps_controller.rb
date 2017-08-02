@@ -1,6 +1,6 @@
 class StampsController < ApplicationController
   def index
-    @stamps = []
+    @stamps = StampClient::Stamp.all
   end
 
   def new

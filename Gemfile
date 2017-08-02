@@ -37,6 +37,11 @@ gem 'jbuilder', '~> 2.5'
 
 # For those styles
 gem 'bootstrap-sass', '~> 3.3.6'
+gem 'pry'
+
+gem 'json_api_client', github: 'sanger/json_api_client'
+gem 'aker_stamp_client', github: 'sanger/aker-stamp-client'
+
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
