@@ -10,12 +10,21 @@
 
   <body>
     <div class="container-fluid">
+
       <div class="page-header row">
         <div class="col-md-8">
           <h1>Aker <small>Stamps UI</small></h1>
         </div>
+        <div class="col-md-4 text-right">
+          <%= link_to 'Log Out', destroy_user_session_url, class: 'btn btn-default vcenter', style: 'margin-top: 28px', method: :delete if user_signed_in? %>
+        </div>
       </div>
-      <%= yield %>
+
+      <div class="row">
+        <div class="col-md-12">
+          <%= yield %>
+        </div>
+      </div>
 
     </div>
   </body>
