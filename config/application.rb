@@ -8,6 +8,10 @@ Bundler.require(*Rails.groups)
 
 module AkerStampsUi
   class Application < Rails::Application
+    config.generators do |g|
+      g.test_framework :rspec
+      g.fixture_replacement :factory_girl, dir: 'spec/factories'
+    end
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.1
 

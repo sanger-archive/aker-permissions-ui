@@ -8,10 +8,8 @@
   </thead>
 
   <tbody>
-  <h1></h1>
-  <!-- When you render a collection, rails checks the type name of the items in the collection,
-  and then looks for a partial under that type name, i.e study_client/stamps/_stamp -->
-    <%= render stamps %>
+    <h1></h1>
+    <%= render partial: 'stamp', collection: @all_stamps %>
   </tbody>
 
 </table>
