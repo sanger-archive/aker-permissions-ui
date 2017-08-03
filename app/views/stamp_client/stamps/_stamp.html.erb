@@ -3,7 +3,7 @@
   <td><%=  stamp.owner_id %></td>
   <td>
     <!-- If the owner of the stamp is the current user -->
-    <% if stamp.owner_id == current_user.email %>
+    <% if @owned_stamps.map(&:id).include?(stamp.id) %>
       <%= link_to 'Edit', edit_stamp_path(stamp), class: 'btn btn-primary' %>
       <%= link_to 'Delete', stamp_path(stamp),
             method: :delete,

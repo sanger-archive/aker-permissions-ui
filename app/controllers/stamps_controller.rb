@@ -2,7 +2,8 @@ class StampsController < ApplicationController
   include JWTCredentials
 
   def index
-    @stamps = StampClient::Stamp.all
+    @all_stamps = StampClient::Stamp.all
+    @owned_stamps = StampClient::Stamp.where(owner_id: current_user.email).all
   end
 
   def new
