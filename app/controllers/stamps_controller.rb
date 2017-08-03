@@ -3,7 +3,7 @@ class StampsController < ApplicationController
 
   def index
     @all_stamps = StampClient::Stamp.all
-    @owned_stamps = StampClient::Stamp.where(owner_id: current_user.email).all
+    @owned_stamps = @all_stamps.select{ |s| s.owner_id.eql?(current_user.email) }
   end
 
   def new
