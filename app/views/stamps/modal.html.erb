@@ -1,0 +1,17 @@
+<div class="modal fade" id="addStampModal" role="dialog" style='top:100px;'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                 <h4 class="modal-title">Create New Stamp</h4>
+            </div>
+            <div class="modal-body">
+              <%= bootstrap_form_for(:stamp, url: stamps_path, method: :post) do |f| %>
+                <%= render "new_stamp_form", f: f %>
+                <%= f.submit("Create") %>
+              <% end %>
+
+            </div>
+        </div>
+    </div>
+</div>
