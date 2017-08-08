@@ -29,7 +29,7 @@ RSpec.describe StampForm do
       r
     end
 
-    context 'when the form represents a new stamp' do
+    context 'when the form creates a new stamp with the correct converted permissions' do
       let(:form) { StampForm.new(name: 'jelly', user_writers: 'dirk,jeff', group_writers: 'zombies,   PIRATES', user_spenders: 'DIRK', group_spenders: 'ninjas') }
 
       before do
@@ -49,18 +49,19 @@ RSpec.describe StampForm do
 
         @permission_id1 = "1"
         @permission_type1 = :edit
-        @permitted1 = 'dirk,jeff,zombies,PIRATES'
+        @permitted1 = 'dirk@sanger.ac.uk,jeff@sanger.ac.uk,zombies,PIRATES'
 
         @permission_id2 = "2"
         @permission_type2 = :consume
-        @permitted2 = 'DIRK,ninjas'
+        @permitted2 = 'dirk@sanger.ac.uk,ninjas'
 
-        stub_data = { data: [{"permission-type": :edit, permitted: ["dirk,jeff","zombies,   PIRATES"]},{"permission-type": :consume, permitted: ["DIRK","ninjas"]}]}
+        stub_data = { data: [{permitted: "dirk@sanger.ac.uk", "permission-type": :edit}, { permitted: "jeff@sanger.ac.uk", "permission-type": :edit },{permitted: "zombies", "permission-type": :edit}, {permitted: "pirates", "permission-type": :edit},{permitted: "dirk@sanger.ac.uk", "permission-type": :consume}, {permitted: "ninjas", "permission-type": :consume}]}
         response_body = make_stamp_with_permission_data(@new_id, @name, @owner_id, @permission_id1, @permitted1, @permission_type1, @permission_id2, @permitted2, @permission_type2)
 
-        stub_request(:post, stamp_urlid(@new_id)+"/set_permissions")
-          .with(body: stub_data.to_json, headers: request_headers)
-          .to_return(status: 200, body: response_body.to_json, headers: response_headers)
+        stub_request(:post, stamp_urlid(@new_id)+"/set_permissions").
+          with(body: stub_data.to_json,
+              headers: request_headers).
+          to_return(status: 200, body: response_body.to_json, headers: response_headers)
 
 
         stub_request(:get, stamp_urlid(@new_id)+"?include=permissions")

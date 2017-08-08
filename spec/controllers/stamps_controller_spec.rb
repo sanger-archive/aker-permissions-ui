@@ -79,4 +79,33 @@ RSpec.describe StampsController, type: :controller do
 
   end
 
+ describe 'DELETE #destroy' do
+    before :each do
+      sign_in(user)
+      allow_any_instance_of(StampsController).to receive(:current_user).and_return(user)
+
+      @stamp1 = double('stamp', id: SecureRandom.uuid, name: 'stamp1', owner_id: 'jeff')
+      @stamp2 = double('stamp', id: SecureRandom.uuid, name: 'stamp2', owner_id: 'dirk')
+
+      @all_stamps = [@stamp1, @stamp2]
+      allow(StampClient::Stamp).to receive(:all).and_return(@all_stamps)
+    end
+
+
+    context "when the user is the owner of the stamp" do
+
+      it "should deactivate the stamp" do
+        controller.instance_variable_set(:@stamp, @stamp1)
+        allow(StampClient::Stamp).to receive(:find_with_permissions).and_return([@stamp1])
+        allow(@stamp1).to receive(:deactivate).and_return true
+
+        delete :destroy, params: { id: @stamp1 }
+        expect(@stamp1.deactivate).not_to be_nil
+        expect(flash[:success]).to match('Stamp deleted')
+      end
+
+    end
+  end
+
+
 end

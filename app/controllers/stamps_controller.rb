@@ -1,16 +1,14 @@
 class StampsController < ApplicationController
   include JWTCredentials
 
+  before_action :current_stamp, except: :create
+
   def index
     @all_stamps = StampClient::Stamp.all
     @owned_stamps = @all_stamps.select{ |s| s.owner_id.eql?(current_user.email) }
   end
 
   def new
-    respond_to do |format|
-      format.html
-      format.js
-    end
   end
 
   def create
@@ -31,6 +29,12 @@ class StampsController < ApplicationController
   end
 
   def destroy
+    if @stamp.deactivate
+      flash[:success] = "Stamp deleted"
+    else
+      flash[:danger] = @stamp.errors.empty? ? "This stamp cannot be deleted." : @stamp.errors.full_messages.join(" ")
+    end
+    redirect_to root_path
   end
 
   def current_user
@@ -43,8 +47,13 @@ class StampsController < ApplicationController
 
   private
 
+  def current_stamp
+    @stamp = (params[:id] && StampClient::Stamp.find_with_permissions(params[:id]).first)
+  end
+
   def stamp_params
     params.require(:stamp).permit(:name, :user_writers, :group_writers, :user_spenders, :group_spenders)
   end
+
 
 end

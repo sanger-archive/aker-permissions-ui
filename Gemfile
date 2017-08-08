@@ -44,7 +44,7 @@ gem 'pry'
 gem 'json_api_client', github: 'sanger/json_api_client'
 gem 'aker_credentials_gem', github: 'sanger/aker-credentials'
 gem 'aker_authentication_gem', github: 'sanger/aker-authentication'
-gem 'aker_stamp_client', github: 'sanger/aker-stamp-client'
+gem 'aker_stamp_client', github: 'harrietc52/aker-stamp-client'
 
 
 group :development, :test do
@@ -52,6 +52,8 @@ group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '~> 2.13'
+  gem 'poltergeist'
+  gem 'launchy'
   gem 'selenium-webdriver'
   gem 'factory_girl_rails'
 end
