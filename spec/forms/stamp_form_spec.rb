@@ -8,17 +8,17 @@ RSpec.describe StampForm do
   let(:url) { 'http://localhost:7000/api/v1/' }
 
   describe '#new' do
-    let(:form) { StampForm.new(name: 'dirk', group_writers: 'zombies,pirates', user_spenders: 'zogh') }
+    let(:form) { StampForm.new(name: 'dirk', group_editors: 'zombies,pirates', user_consumers: 'zogh') }
 
     it 'has the attributes specified that are in the ATTRIBUTES list' do
       expect(form.name).to eq 'dirk'
-      expect(form.user_spenders).to eq('zogh')
-      expect(form.group_writers).to eq('zombies,pirates')
+      expect(form.group_editors).to eq('zombies,pirates')
+      expect(form.user_consumers).to eq('zogh')
     end
     it 'has nil for attributes that were not specified' do
       expect(form.id).to be_nil
-      expect(form.user_writers).to be_nil
-      expect(form.group_spenders).to be_nil
+      expect(form.user_editors).to be_nil
+      expect(form.group_consumers).to be_nil
     end
   end
 
@@ -30,7 +30,7 @@ RSpec.describe StampForm do
     end
 
     context 'when the form creates a new stamp with the correct converted permissions' do
-      let(:form) { StampForm.new(name: 'jelly', user_writers: 'dirk,jeff', group_writers: 'zombies,   PIRATES', user_spenders: 'DIRK', group_spenders: 'ninjas') }
+      let(:form) { StampForm.new(name: 'jelly', user_editors: 'dirk,jeff', group_editors: 'zombies,   PIRATES', user_consumers: 'DIRK', group_consumers: 'ninjas') }
 
       before do
         @new_id = SecureRandom.uuid

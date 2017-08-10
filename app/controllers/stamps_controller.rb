@@ -8,9 +8,6 @@ class StampsController < ApplicationController
     @owned_stamps = @all_stamps.select{ |s| s.owner_id.eql?(current_user.email) }
   end
 
-  def new
-  end
-
   def create
     stamp_form = StampForm.new(stamp_params)
 
@@ -23,13 +20,25 @@ class StampsController < ApplicationController
   end
 
   def show
+    make_stamp_form
   end
 
   def edit
+    make_stamp_form
+  end
+
+  def update
+    stamp_form = StampForm.new(stamp_params.merge(id: params[:id]))
+    if stamp_form.save
+      flash[:success] = "Stamp updated"
+    else
+      flash[:danger] = "Failed to update stamp"
+    end
+    redirect_to root_path
   end
 
   def destroy
-    if @stamp.deactivate
+    if @stamp.destroy
       flash[:success] = "Stamp deleted"
     else
       flash[:danger] = @stamp.errors.empty? ? "This stamp cannot be deleted." : @stamp.errors.full_messages.join(" ")
@@ -52,8 +61,11 @@ class StampsController < ApplicationController
   end
 
   def stamp_params
-    params.require(:stamp).permit(:name, :user_writers, :group_writers, :user_spenders, :group_spenders)
+    params.require(:stamp).permit(:name, :user_editors, :group_editors, :user_consumers, :group_consumers)
   end
 
+  def make_stamp_form
+    @stampform = StampForm.from_stamp(@stamp)
+  end
 
 end

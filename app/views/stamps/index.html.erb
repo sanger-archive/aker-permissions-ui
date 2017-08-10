@@ -1,12 +1,13 @@
 <div class="row">
   <div class="col-md-12">
-    <%= link_to 'Create New Stamp', new_stamp_url, { remote: true, class: 'btn btn-success vcenter', 'data-target': "#addStampModal", 'data-toggle' => "modal" } %>
-    <%= render template: 'stamps/modal' %>
+    <%= link_to 'Create New Stamp', new_stamp_url, { remote: true, class: 'btn btn-success vcenter', 'data-target': "#createStamp", 'data-toggle': "modal" } %>
+    <%= render template: 'stamps/create_stamp_modal' %>
   </div>
 </div>
 
 <div class="row">
   <div class="col-md-12">
     <%= render "stamp_table", stamps: @all_stamps %>
+    <%= render template: 'stamps/view_edit_stamp_modal', locals: { readonly: false } %>
   </div>
 </div>

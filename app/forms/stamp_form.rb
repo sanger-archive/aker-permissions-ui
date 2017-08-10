@@ -5,7 +5,7 @@ class StampForm
   include ActiveModel::Conversion
   include ActiveModel::Validations
 
-  ATTRIBUTES = [:id, :name, :user_writers, :group_writers, :user_spenders, :group_spenders]
+  ATTRIBUTES = [:id, :name, :user_editors, :group_editors, :user_consumers, :group_consumers]
 
   attr_accessor *ATTRIBUTES
 
@@ -17,13 +17,22 @@ class StampForm
   end
 
   def save
-    create_objects
+    valid? && (id.present? ? update_objects : create_objects)
   end
 
   def create_objects
     ActiveRecord::Base.transaction do
       stamp = StampClient::Stamp.create({name: name})
+      stamp.set_permissions_to(convert_permissions)
+    end
+  rescue
+    false
+  end
 
+  def update_objects
+    ActiveRecord::Base.transaction do
+      stamp = StampClient::Stamp.find_with_permissions(id).first
+      stamp.update(name: name)
       stamp.set_permissions_to(convert_permissions)
     end
   rescue
@@ -31,21 +40,17 @@ class StampForm
   end
 
   def self.from_stamp(stamp)
-    new(id: stamp.id, name: stamp.name,
-        user_writers: stamp_permitted(stamp, :edit, false),
-        group_writers: stamp_permitted(stamp, :edit, true),
-        user_spenders: stamp_permitted(stamp, :consume, false),
-        group_spenders: stamp_permitted(stamp, :consume, true))
+    new(attributes_from_stamp(stamp))
   end
 
   private
 
   def convert_permissions
     permitted = []
-    add_to_permission(permitted, user_writers, false, :edit)
-    add_to_permission(permitted, group_writers, true, :edit)
-    add_to_permission(permitted, user_spenders, false, :consume)
-    add_to_permission(permitted, group_spenders, true, :consume)
+    add_to_permission(permitted, user_editors, false, :edit)
+    add_to_permission(permitted, group_editors, true, :edit)
+    add_to_permission(permitted, user_consumers, false, :consume)
+    add_to_permission(permitted, group_consumers, true, :consume)
     permitted
   end
 
@@ -62,7 +67,18 @@ class StampForm
     return name
   end
 
+
+  def self.attributes_from_stamp(stamp)
+    { id: stamp.id, name: stamp.name,
+      user_editors: stamp_permitted(stamp, :edit, false),
+      group_editors: stamp_permitted(stamp, :edit, true),
+      user_consumers: stamp_permitted(stamp, :consume, false),
+      group_consumers: stamp_permitted(stamp, :consume, true)
+    }
+  end
+
   def self.stamp_permitted(stamp, permission_type, groups)
+    return '' if stamp.permissions.nil?
     permission_type = permission_type.to_sym
     perms = stamp.permissions.select { |p| p.permission_type.to_sym==permission_type && p.permitted.include?('@')!=groups }.
       map { |p| p.permitted }
@@ -73,7 +89,7 @@ class StampForm
         perms.delete(stamp.owner_id.downcase)
       end
     end
-    if permission_type==:write && !groups && stamp.owner_id
+    if permission_type==:edit && !groups && stamp.owner_id
       perms.delete(stamp.owner_id.downcase)
     end
     perms.join(',')

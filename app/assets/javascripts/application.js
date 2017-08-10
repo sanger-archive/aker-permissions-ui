@@ -14,6 +14,16 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require bootstrap-sprockets
-//= require rails-ujs
 //= require_tree .
 
+$(document).ready(function(){
+  $("a[data-remote]").on("ajax:success", function (e, data, status, xhr) {
+    $("#viewEditStamp").html($("#viewEditStamp", xhr.responseText).html());
+  }).on("ajax:error", function(e, xhr, status, error) {
+    $("#viewEditStamp").append("<p>ERROR</p>");
+  });
+
+  $("#viewEditStamp").on('show.bs.modal', function(e) {
+    $("#viewEditStamp").html('');
+  })
+});

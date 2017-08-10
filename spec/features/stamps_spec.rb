@@ -5,69 +5,154 @@ RSpec.feature "Stamps", type: :feature do
   let(:user) { create(:user, email: 'jeff') }
 
   describe 'Stamps' do
-    context 'with a logged in user' do
 
+    context '#index' do
       before :each do
         sign_in(user)
         allow_any_instance_of(StampsController).to receive(:current_user).and_return(user)
+
+        stamp1 = double('stamp', id: SecureRandom.uuid, name: 'stamp1', owner_id: 'jeff')
+        stamp2 = double('stamp', id: SecureRandom.uuid, name: 'stamp2', owner_id: 'dirk')
+
+        @all_stamps = [stamp1, stamp2]
+        allow(StampClient::Stamp).to receive(:all).and_return(@all_stamps)
+        owned_stamps = double('owned stamps', all: [stamp1])
+        allow(StampClient::Stamp).to receive(:where).with({owner_id: 'jeff'}).and_return(owned_stamps)
+
+        visit root_path
       end
 
-      context '#index' do
+      it 'shows all stamps' do
+        expect(page).to have_current_path(root_path)
+        expect(page).to have_selector('tr', count: @all_stamps.size+1)
+      end
+
+      it 'shows Edit and delete for stamps that the current user owns' do
+        expect(find('tr', text: 'stamp1')).to have_content("Edit")
+        expect(find('tr', text: 'stamp1')).to have_content("Delete")
+        expect(find('tr', text: 'stamp1')).not_to have_content("View")
+      end
+
+      it 'only shows View for stamps that the current user does not own' do
+        expect(find('tr', text: 'stamp2')).to have_content("View")
+        expect(find('tr', text: 'stamp2')).not_to have_content("Delete")
+        expect(find('tr', text: 'stamp2')).not_to have_content("Edit")
+      end
+
+    end
+
+    context '#show' do
+      before :each do
+        sign_in(user)
+        allow_any_instance_of(StampsController).to receive(:current_user).and_return(user)
+
+        @stamp1 = double('stamp', id: SecureRandom.uuid, name: 'stamp1', owner_id: 'jeff')
+        @stamp2 = double('stamp', id: SecureRandom.uuid, name: 'stamp2', owner_id: 'dirk')
+
+        @all_stamps = [@stamp1, @stamp2]
+        allow(StampClient::Stamp).to receive(:all).and_return(@all_stamps)
+        owned_stamps = double('owned stamps', all: [@stamp1])
+        allow(StampClient::Stamp).to receive(:where).with({owner_id: 'jeff'}).and_return(owned_stamps)
+        allow(StampClient::Stamp).to receive(:find_with_permissions).and_return([@stamp2])
+
+        visit root_path
+      end
+
+      it 'shows the view modal when you click on View' do
+        allow(@stamp2).to receive(:permissions).and_return([])
+        click_link("View")
+        expect(page).to have_content('View Stamp')
+        expect(field_labeled("Name", disabled: true).value).to eq 'stamp2'
+        expect(page).not_to have_content('Update')
+      end
+    end
+
+    context '#edit' do
+      before :each do
+        sign_in(user)
+        allow_any_instance_of(StampsController).to receive(:current_user).and_return(user)
+
+        @stamp1 = double('stamp', id: SecureRandom.uuid, name: 'stamp1', owner_id: 'jeff')
+        @stamp2 = double('stamp', id: SecureRandom.uuid, name: 'stamp2', owner_id: 'dirk')
+
+        @all_stamps = [@stamp1, @stamp2]
+        allow(StampClient::Stamp).to receive(:all).and_return(@all_stamps)
+        owned_stamps = double('owned stamps', all: [@stamp1])
+        allow(StampClient::Stamp).to receive(:where).with({owner_id: 'jeff'}).and_return(owned_stamps)
+        allow(StampClient::Stamp).to receive(:find_with_permissions).and_return([@stamp1])
+
+        visit root_path
+      end
+
+      it 'shows the edit modal when you click on Edit' do
+        allow(@stamp1).to receive(:permissions).and_return([])
+        click_link("Edit")
+        expect(page).to have_content('Edit Stamp')
+        expect(field_labeled("Name").value).to eq 'stamp1'
+        expect(page).to have_button('Update')
+      end
+    end
+
+    context '#update' do
         before :each do
-          stamp1 = double('stamp', id: SecureRandom.uuid, name: 'stamp1', owner_id: 'jeff')
-          stamp2 = double('stamp', id: SecureRandom.uuid, name: 'stamp2', owner_id: 'dirk')
+        sign_in(user)
+        allow_any_instance_of(StampsController).to receive(:current_user).and_return(user)
 
-          @all_stamps = [stamp1, stamp2]
-          allow(StampClient::Stamp).to receive(:all).and_return(@all_stamps)
-          owned_stamps = double('owned stamps', all: [stamp1])
-          allow(StampClient::Stamp).to receive(:where).with({owner_id: 'jeff'}).and_return(owned_stamps)
+        @stamp1 = double('stamp', id: SecureRandom.uuid, name: 'stamp1', owner_id: 'jeff')
+        @stamp2 = double('stamp', id: SecureRandom.uuid, name: 'stamp2', owner_id: 'dirk')
 
-          visit root_path
-        end
+        @all_stamps = [@stamp1, @stamp2]
+        allow(StampClient::Stamp).to receive(:all).and_return(@all_stamps)
+        owned_stamps = double('owned stamps', all: [@stamp1])
+        allow(StampClient::Stamp).to receive(:where).with({owner_id: 'jeff'}).and_return(owned_stamps)
+        allow(StampClient::Stamp).to receive(:find_with_permissions).and_return([@stamp1])
 
-        it 'shows all stamps' do
-          expect(page).to have_current_path(root_path)
-          expect(page).to have_selector('tr', count: @all_stamps.size+1)
-        end
-
-        it 'shows Edit and delete for stamps that the current user owns' do
-          find('tr', text: 'stamp1').should have_content("Edit")
-          find('tr', text: 'stamp1').should have_content("Delete")
-          find('tr', text: 'stamp1').should_not have_content("View")
-        end
-
-        it 'only shows View for stamps that the current user does not own' do
-          find('tr', text: 'stamp2').should have_content("View")
-          find('tr', text: 'stamp2').should_not have_content("Edit")
-          find('tr', text: 'stamp2').should_not have_content("Delete")
-        end
-
+        visit root_path
       end
 
-      context '#destroy' do
-         before :each do
-          @stamp1 = double('stamp', id: SecureRandom.uuid, name: 'stamp1', owner_id: 'jeff')
-          @stamp2 = double('stamp', id: SecureRandom.uuid, name: 'stamp2', owner_id: 'dirk')
+      it 'shows the edit modal when you click on Edit' do
+        new_name = "newstampname"
+        @new_stamp = double('stamp', id: @stamp1.id, name: new_name, owner_id: 'jeff', user_editors: 'user1')
 
-          @all_stamps = [@stamp1, @stamp2]
-          allow(StampClient::Stamp).to receive(:all).and_return(@all_stamps)
-          owned_stamps = double('owned stamps', all: [@stamp1])
-          allow(StampClient::Stamp).to receive(:where).with({owner_id: 'jeff'}).and_return(owned_stamps)
+        allow(@stamp1).to receive(:permissions).and_return([])
+        allow(@stamp1).to receive(:update).with(name: new_name).and_return(@new_stamp)
+        allow(@stamp1).to receive(:set_permissions_to)
+        allow(StampClient::Stamp).to receive(:all).and_return([@new_stamp, @stamp2])
 
-          visit root_path
-        end
+        click_link("Edit")
+        fill_in('Name', :with => 'newstampname')
+        click_button("Update")
+        expect(page).to have_content('newstampname')
+        expect(page).not_to have_content('stamp1')
+      end
+    end
 
-        it 'shows delete for stamps that the current user owns' do
-          page.has_content?('stamp1')
-          find('tr', text: 'stamp1').should have_content("Delete")
-        end
+    context '#destroy' do
+      before :each do
+        sign_in(user)
+        allow_any_instance_of(StampsController).to receive(:current_user).and_return(user)
 
-        it 'can delete a stamp that the user owns' do
-          allow(StampClient::Stamp).to receive(:find_with_permissions).and_return([@stamp1])
-          allow(@stamp1).to receive(:deactivate).and_return true
-          click_link('Delete')
-          page.has_content?('Stamp deleted')
-        end
+        @stamp1 = double('stamp', id: SecureRandom.uuid, name: 'stamp1', owner_id: 'jeff')
+        @stamp2 = double('stamp', id: SecureRandom.uuid, name: 'stamp2', owner_id: 'dirk')
+
+        @all_stamps = [@stamp1, @stamp2]
+        allow(StampClient::Stamp).to receive(:all).and_return(@all_stamps)
+        owned_stamps = double('owned stamps', all: [@stamp1])
+        allow(StampClient::Stamp).to receive(:where).with({owner_id: 'jeff'}).and_return(owned_stamps)
+
+        visit root_path
+      end
+
+      it 'shows delete for stamps that the current user owns' do
+        expect(page).to have_content('stamp1')
+        expect(find('tr', text: 'stamp1')).to have_content("Delete")
+      end
+
+      it 'can delete a stamp that the user owns' do
+        allow(StampClient::Stamp).to receive(:find_with_permissions).and_return([@stamp1])
+        allow(@stamp1).to receive(:destroy).and_return true
+        click_link('Delete')
+        page.has_content?('Stamp deleted')
       end
     end
   end
