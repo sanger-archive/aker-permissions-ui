@@ -1,13 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe StampForm do
-  let(:user) { create(:user) }
-  let(:content_type) { 'application/vnd.api+json' }
-  let(:request_headers) { { 'Accept' => content_type, 'Content-Type'=> content_type } }
-  let(:response_headers) { { 'Content-Type' => content_type } }
-  let(:url) { 'http://localhost:7000/api/v1/' }
-
-
   describe '#new' do
     let(:form) { StampForm.new(name: 'dirk', group_editors: 'zombies,pirates', user_consumers: 'zogh') }
 
@@ -89,7 +82,6 @@ RSpec.describe StampForm do
 
       stamp_form = StampForm.from_stamp(stamp)
     end
-
   end
 
 end

@@ -6,7 +6,7 @@ class StampForm
   include ActiveModel::Validations
 
   validates :name, presence: true, format: { with: /\A[A-Za-z0-9_-]+\z/ }
-  validates :user_editors, :group_editors, :user_consumers, :group_consumers, :allow_blank => true, format: { with: /\A[A-Za-z0-9,_]+\z/ }
+  validates :user_editors, :group_editors, :user_consumers, :group_consumers, allow_blank: true, format: { with: /\A[A-Za-z0-9,_]+\z/ }
 
   ATTRIBUTES = [:id, :name, :user_editors, :group_editors, :user_consumers, :group_consumers]
 
@@ -22,6 +22,12 @@ class StampForm
   def save
     valid? && (id.present? ? update_objects : create_objects)
   end
+
+  def self.from_stamp(stamp)
+    new(attributes_from_stamp(stamp))
+  end
+
+  private
 
   def create_objects
     ActiveRecord::Base.transaction do
@@ -41,12 +47,6 @@ class StampForm
   rescue
     false
   end
-
-  def self.from_stamp(stamp)
-    new(attributes_from_stamp(stamp))
-  end
-
-  private
 
   def convert_permissions
     permitted = []
