@@ -7,7 +7,7 @@ Rails.application.config.after_initialize do
     ENV['http_proxy'] = nil
     ENV['https_proxy'] = nil
     connection.faraday.proxy ''
-    # connection.use JWTSerializer
+    connection.use JWTSerializer
     if Rails.env.production? || Rails.env.staging?
       connection.use ZipkinTracer::FaradayHandler, 'Stamp service'
     end

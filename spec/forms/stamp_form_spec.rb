@@ -7,6 +7,7 @@ RSpec.describe StampForm do
   let(:response_headers) { { 'Content-Type' => content_type } }
   let(:url) { 'http://localhost:7000/api/v1/' }
 
+
   describe '#new' do
     let(:form) { StampForm.new(name: 'dirk', group_editors: 'zombies,pirates', user_consumers: 'zogh') }
 
@@ -20,148 +21,75 @@ RSpec.describe StampForm do
       expect(form.user_editors).to be_nil
       expect(form.group_consumers).to be_nil
     end
+
   end
 
   describe '#save' do
-    let(:stamp) do
-      r = build(:stamp, name: 'stamp1')
-      r.save
-      r
-    end
-
-    context 'when the form creates a new stamp with the correct converted permissions' do
-      let(:form) { StampForm.new(name: 'jelly', user_editors: 'dirk,jeff', group_editors: 'zombies,   PIRATES', user_consumers: 'DIRK', group_consumers: 'ninjas') }
+    context 'validation' do
+      let(:form1) { StampForm.new(name: '', group_editors: 'zombies,pirates', user_consumers: 'zogh') }
+      let(:form2) { StampForm.new(name: 'stamp_2', group_editors: 'zs56d87fvbc`./;') }
+      let(:form3) { StampForm.new(name: 'stamp-3', user_editors: 'zogh653', group_editors: 'ab12c', user_consumers: 'di23rk', group_consumers: 'x64z') }
+      let(:form4) { StampForm.new(name: 'stamp.,/', group_editors: 'pirates', user_consumers: 'zogh') }
 
       before do
-        @new_id = SecureRandom.uuid
-        @name = "jelly"
-        @owner = user.email
-
-        stamp_data = make_stamp_data(@new_id, @name, @owner)
-
-        stub_request(:post, url+"stamps")
-          .with( body: { data: { type: "stamps", attributes: { name: "jelly" }}}.to_json, headers: request_headers )
-          .to_return(status: 201, body: { data: stamp_data }.to_json, headers: response_headers)
-
-        stub_request(:get, stamp_urlid(@new_id))
-         .with(headers: request_headers)
-         .to_return(status: 200, body: { data: stamp_data }.to_json, headers: response_headers)
-
-        @permission_id1 = "1"
-        @permission_type1 = :edit
-        @permitted1 = 'dirk@sanger.ac.uk,jeff@sanger.ac.uk,zombies,PIRATES'
-
-        @permission_id2 = "2"
-        @permission_type2 = :consume
-        @permitted2 = 'dirk@sanger.ac.uk,ninjas'
-
-        stub_data = { data: [{permitted: "dirk@sanger.ac.uk", "permission-type": :edit}, { permitted: "jeff@sanger.ac.uk", "permission-type": :edit },{permitted: "zombies", "permission-type": :edit}, {permitted: "pirates", "permission-type": :edit},{permitted: "dirk@sanger.ac.uk", "permission-type": :consume}, {permitted: "ninjas", "permission-type": :consume}]}
-        response_body = make_stamp_with_permission_data(@new_id, @name, @owner_id, @permission_id1, @permitted1, @permission_type1, @permission_id2, @permitted2, @permission_type2)
-
-        stub_request(:post, stamp_urlid(@new_id)+"/set_permissions").
-          with(body: stub_data.to_json,
-              headers: request_headers).
-          to_return(status: 200, body: response_body.to_json, headers: response_headers)
-
-
-        stub_request(:get, stamp_urlid(@new_id)+"?include=permissions")
-          .with(headers: request_headers )
-          .to_return(status: 200, body: response_body.to_json, headers: response_headers)
-
-        @result = form.save
-     end
-
-      it 'has an id' do
-        expect(@result.id).to eq(@new_id)
+        allow_any_instance_of(StampForm).to receive(:create_objects).and_return(true)
       end
 
-      it 'has a name' do
-        expect(@result.name).to eq(@name)
+      it 'not valid when no name is specified' do
+        @result = form1.save
+        expect(@result).to be false
       end
 
-      it 'creates a stamp as described' do
-        stamp = StampClient::Stamp.find(@result.id)
-        expect(stamp).not_to be_nil
-        expect(stamp.first.name).to eq(@name)
-        expect(stamp.first.owner_id).to eq(@owner)
+      it 'not valid when a name is in the wrong format' do
+        @result = form2.save
+        expect(@result).to be false
       end
 
-      it 'sets up the correct permissions' do
-        stamp = StampClient::Stamp.find_with_permissions(@new_id)
-        permissions = stamp.first.permissions
-        expect(permissions).not_to be_nil
-        expect(permissions.length).to eq 2
-        permission1 = permissions&.first
-        expect(permission1.id).to eq @permission_id1
-        expect(permission1.permission_type).to eq @permission_type1
-        expect(permission1.permitted).to eq @permitted1
-        permission2 = permissions&.last
-        expect(permission2.id).to eq @permission_id2
-        expect(permission2.permission_type).to eq @permission_type2
-        expect(permission2.permitted).to eq @permitted2
-        expect(permission2.accessible_id).to eq @new_id
+      it 'not valid when a permission attribute is in the wrong format' do
+        @result = form2.save
+        expect(@result).to be false
+      end
+
+      it "is valid with all possible attributes" do
+        @result = form3.save
+        expect(@result).to be true
+      end
+    end
+
+    context 'when creating a new StampForm' do
+      let(:form) { StampForm.new(name: 'stamp1', group_editors: 'zombies,pirates', user_consumers: 'zogh') }
+
+      it 'calls create_stamps' do
+        expect(form).to receive(:create_objects)
+        form.save
+      end
+    end
+
+    context 'when updating a StampForm' do
+      let(:form) { StampForm.new(id: '123', name: 'stamp1', group_editors: 'zombies,pirates', user_consumers: 'zogh') }
+
+      it 'calls create_stamps' do
+        expect(form).to receive(:update_objects)
+        form.save
       end
     end
   end
 
-  def stamp_urlid(id)
-    url+'stamps/'+id
-  end
+  describe 'from_stamp' do
+    let(:form) { StampForm.new(id: '123', name: 'stamp1', group_editors: 'pirates') }
 
-  def make_stamp_data(id, name, owner_id)
-    {
-      id: id,
-      type: "stamps",
-      attributes: {
-        name: name,
-        'owner-id': owner_id
-      }
+    let(:stamp) {
+      n = build(:stamp, id: '321', name: 'stamp1', group_editors: ['pirates'])
+      n
     }
-  end
 
-  def make_stamp_with_permission_data(stampid, name, owner_id, permission_id1, permitted1, permission_type1, permission_id2, permitted2, permission_type2)
-    {
-      data:
-      {
-        id: stampid,
-        type: "stamps",
-        attributes:
-        {
-          name: name,
-          "owner-id": owner_id
-        },
-        relationships:
-        {
-          permissions:
-          {
-            data: [{ type: "permissions", id: permission_id1}, { type: "permissions", id: permission_id2}]
-          }
-        }
-      },
-      included:
-      [
-        {
-          id: permission_id1,
-          type: "permissions",
-          attributes:
-          {
-            "permission-type": permission_type1,
-            permitted: permitted1,
-            "accessible-id": stampid
-          }
-        },
-        {
-          id: permission_id2,
-          type: "permissions",
-          attributes:
-          {
-            "permission-type": permission_type2,
-            permitted: permitted2,
-            "accessible-id": stampid
-          }
-        }
-      ]
-    }
+    it 'calls create_stamps' do
+      expect(StampForm).to receive(:attributes_from_stamp).and_return({ id: stamp.id, name: stamp.name, group_editors: ['pirates']})
+      expect(StampForm).to receive(:new).with({ id: stamp.id, name: stamp.name, group_editors: ['pirates']})
+
+      stamp_form = StampForm.from_stamp(stamp)
+    end
+
   end
 
 end

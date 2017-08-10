@@ -1,10 +1,4 @@
 GIT
-  remote: https://github.com/harrietc52/aker-stamp-client.git
-  revision: a42b8b77a8e22fdab975c79c5f1a70865a2d8331
-  specs:
-    aker_stamp_client (0.1.1)
-
-GIT
   remote: https://github.com/sanger/aker-authentication.git
   revision: 09c11204f386071fb194d97bcbf36abd248378f2
   specs:
@@ -23,6 +17,12 @@ GIT
     aker_credentials_gem (0.1.1)
       jwt
       request_store
+
+GIT
+  remote: https://github.com/sanger/aker-stamp-client.git
+  revision: 76eba85850c6e855c14c39884bb286f27f9d2993
+  specs:
+    aker_stamp_client (0.1.1)
 
 GIT
   remote: https://github.com/sanger/json_api_client.git

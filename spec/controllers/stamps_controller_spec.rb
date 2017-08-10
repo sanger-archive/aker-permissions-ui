@@ -60,7 +60,7 @@ RSpec.describe StampsController, type: :controller do
       allow(StampClient::Stamp).to receive(:create).and_return(stamp4)
       allow(stamp4).to receive(:set_permissions_to).and_return true
 
-      post :create, params: { stamp: { name: "stamp4", group_editors: 'team_xzy', user_consumers: 'zogh' } }
+      post :create, params: { stamp: { name: "stamp4", group_editors: 'teamxzy', user_consumers: 'zogh' } }
       expect(flash[:success]).to match('Stamp created')
     end
   end
