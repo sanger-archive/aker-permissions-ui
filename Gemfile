@@ -39,17 +39,32 @@ gem 'jbuilder', '~> 2.5'
 
 # For those styles
 gem 'bootstrap-sass', '~> 3.3.6'
+gem 'bootstrap_form'
+
+gem 'pry'
+
+gem 'json_api_client', github: 'sanger/json_api_client'
+gem 'aker_credentials_gem', github: 'sanger/aker-credentials'
+gem 'aker_authentication_gem', github: 'sanger/aker-authentication'
+gem 'aker_stamp_client', github: 'sanger/aker-stamp-client'
+
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '~> 2.13'
+  gem 'poltergeist'
+  gem 'launchy'
   gem 'selenium-webdriver'
+  gem 'factory_girl_rails'
+  gem 'rails-controller-testing'
 end
 
 group :test do
   gem 'rspec-rails'
+  gem 'webmock'
+  gem 'timecop'
   # Use sqlite3 as the database for Active Record
   gem 'sqlite3'
 end
