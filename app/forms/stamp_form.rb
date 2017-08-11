@@ -3,7 +3,7 @@ class StampForm
 
   validates :name, presence: true, format: { with: /\A[A-Za-z0-9_-]+\z/ }
   validates :user_editors, :user_consumers, allow_blank: true, format: { with: /\A[A-Za-z0-9 ,._@-]+\z/ }
-  validates :group_editors, :group_consumers, allow_blank: true, format: { with: /\A[A-Za-z0-9 ,_@,]+\z/ }
+  validates :group_editors, :group_consumers, allow_blank: true, format: { with: /\A[A-Za-z0-9 ,_]+\z/ }
 
   ATTRIBUTES = [:id, :name, :user_editors, :group_editors, :user_consumers, :group_consumers]
 
@@ -30,6 +30,7 @@ class StampForm
     ActiveRecord::Base.transaction do
       stamp = StampClient::Stamp.create({name: name})
       stamp.set_permissions_to(convert_permissions)
+      true
     end
   rescue
     false
@@ -40,6 +41,7 @@ class StampForm
       stamp = StampClient::Stamp.find_with_permissions(id).first
       stamp.update(name: name)
       stamp.set_permissions_to(convert_permissions)
+      true
     end
   rescue
     false
