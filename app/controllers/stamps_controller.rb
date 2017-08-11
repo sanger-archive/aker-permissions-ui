@@ -14,7 +14,7 @@ class StampsController < ApplicationController
     if stamp_form.save
       flash[:success] = "Stamp created"
     else
-      flash[:danger] = "Failed to create stamp"
+      flash[:danger] = "Failed to create stamp: #{stamp_form.errors.full_messages}"
     end
     redirect_to root_path
   end
@@ -32,7 +32,7 @@ class StampsController < ApplicationController
     if stamp_form.save
       flash[:success] = "Stamp updated"
     else
-      flash[:danger] = "Failed to update stamp"
+      flash[:danger] = "Failed to update stamp: #{stamp_form.errors.full_messages}"
     end
     redirect_to root_path
   end
