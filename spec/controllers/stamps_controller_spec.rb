@@ -99,9 +99,9 @@ RSpec.describe StampsController, type: :controller do
     it "it should update the stamp" do
       controller.instance_variable_set(:@stamp, @stamp1)
       allow(StampClient::Stamp).to receive(:find_with_permissions).and_return([@stamp1])
-      allow_any_instance_of(StampForm).to receive(:save).and_return(true)
+      expect_any_instance_of(StampForm).to receive(:save).and_return(true)
 
-      get :update, params: { id: @stamp1.id, stamp: { name: "newstampname" } }
+      put :update, params: { id: @stamp1.id, stamp: { name: "newstampname" } }
       expect(flash[:success]).to match('Stamp updated')
     end
 
