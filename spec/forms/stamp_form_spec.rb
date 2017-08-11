@@ -22,7 +22,7 @@ RSpec.describe StampForm do
       let(:form1) { StampForm.new(name: '', group_editors: 'zombies,pirates', user_consumers: 'zogh') }
       let(:form2) { StampForm.new(name: 'stamp_2', group_editors: 'zs56d87fvbc`./;') }
       let(:form3) { StampForm.new(name: 'stamp.,/', group_editors: 'pirates', user_consumers: 'zogh') }
-      let(:form4) { StampForm.new(name: 'stamp-3', user_editors: 'zogh653', group_editors: 'ab12c', user_consumers: 'di23rk', group_consumers: 'x64z') }
+      let(:form4) { StampForm.new(name: 'stamp-3', user_editors: 'zogh653@sanger.ac.uk,dirk_123', group_editors: 'ab12c,     cbj45_', user_consumers: 'di23rk, dsio_290-', group_consumers: 'x64z') }
 
       before do
         allow_any_instance_of(StampForm).to receive(:create_objects).and_return(true)
