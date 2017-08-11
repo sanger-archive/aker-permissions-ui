@@ -2,7 +2,8 @@ class StampForm
   include ActiveModel::Validations
 
   validates :name, presence: true, format: { with: /\A[A-Za-z0-9_-]+\z/ }
-  validates :user_editors, :group_editors, :user_consumers, :group_consumers, allow_blank: true, format: { with: /\A[A-Za-z0-9,_]+\z/ }
+  validates :user_editors, :user_consumers, allow_blank: true, format: { with: /\A[A-Za-z0-9 ,._@-]+\z/ }
+  validates :group_editors, :group_consumers, allow_blank: true, format: { with: /\A[A-Za-z0-9 ,_@,]+\z/ }
 
   ATTRIBUTES = [:id, :name, :user_editors, :group_editors, :user_consumers, :group_consumers]
 
