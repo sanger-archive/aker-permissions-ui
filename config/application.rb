@@ -21,4 +21,5 @@ module AkerStampsUi
 
   end
 
+  config.ldap = config_for(:ldap)
 end
