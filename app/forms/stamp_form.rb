@@ -79,12 +79,21 @@ class StampForm
     }
   end
 
+  def self.stamp_permitted(stamp, permission_type, groups)
+    return '' if stamp.permissions.nil?
+    permission_type = permission_type.to_sym
+    perms = stamp.permissions.select { |p| p.permission_type.to_sym==permission_type && p.permitted.include?('@')!=groups }.
+      map { |p| p.permitted }
+    filter_perms(stamp, permission_type, groups, perms)
+    perms.join(',')
+  end
+
   def self.filter_perms(stamp, permission_type, groups, perms)
     # This removes some permission setting that are redundant or should be omitted, when
     # the form is going to be displayed to the user:
     # 1 - The group 'world' have always 'read' permissions
     # 2 - The owner of a stamp have always 'read' permissions on the materials
-    # 3 - The owner of the stamp will always have 'edit' permissions 
+    # 3 - The owner of the stamp will always have 'edit' permissions
     if permission_type==:read
       if groups
         perms.delete('world')
@@ -95,15 +104,6 @@ class StampForm
     if permission_type==:edit && !groups && stamp.owner_id
       perms.delete(stamp.owner_id.downcase)
     end
-  end
-
-  def self.stamp_permitted(stamp, permission_type, groups)
-    return '' if stamp.permissions.nil?
-    permission_type = permission_type.to_sym
-    perms = stamp.permissions.select { |p| p.permission_type.to_sym==permission_type && p.permitted.include?('@')!=groups }.
-      map { |p| p.permitted }
-    filter_perms(stamp, permission_type, groups, perms)
-    perms.join(',')
   end
 
 end
