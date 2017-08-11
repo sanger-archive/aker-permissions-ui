@@ -41,7 +41,7 @@ class StampsController < ApplicationController
     if @stamp.destroy
       flash[:success] = "Stamp deleted"
     else
-      flash[:danger] = @stamp.errors.empty? ? "This stamp cannot be deleted." : @stamp.errors.full_messages.join(" ")
+      flash[:danger] = "Failed to delete stamp"
     end
     redirect_to root_path
   end
