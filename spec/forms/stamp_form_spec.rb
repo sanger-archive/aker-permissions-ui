@@ -21,8 +21,8 @@ RSpec.describe StampForm do
     context 'validation' do
       let(:form1) { StampForm.new(name: '', group_editors: 'zombies,pirates', user_consumers: 'zogh') }
       let(:form2) { StampForm.new(name: 'stamp_2', group_editors: 'zs56d87fvbc`./;') }
-      let(:form3) { StampForm.new(name: 'stamp-3', user_editors: 'zogh653', group_editors: 'ab12c', user_consumers: 'di23rk', group_consumers: 'x64z') }
-      let(:form4) { StampForm.new(name: 'stamp.,/', group_editors: 'pirates', user_consumers: 'zogh') }
+      let(:form3) { StampForm.new(name: 'stamp.,/', group_editors: 'pirates', user_consumers: 'zogh') }
+      let(:form4) { StampForm.new(name: 'stamp-3', user_editors: 'zogh653', group_editors: 'ab12c', user_consumers: 'di23rk', group_consumers: 'x64z') }
 
       before do
         allow_any_instance_of(StampForm).to receive(:create_objects).and_return(true)
@@ -33,18 +33,18 @@ RSpec.describe StampForm do
         expect(@result).to be false
       end
 
-      it 'not valid when a name is in the wrong format' do
-        @result = form2.save
-        expect(@result).to be false
-      end
-
       it 'not valid when a permission attribute is in the wrong format' do
         @result = form2.save
         expect(@result).to be false
       end
 
-      it "is valid with all possible attributes" do
+      it 'not valid when a name is in the wrong format' do
         @result = form3.save
+        expect(@result).to be false
+      end
+
+      it "is valid with all possible attributes" do
+        @result = form4.save
         expect(@result).to be true
       end
     end
@@ -52,8 +52,9 @@ RSpec.describe StampForm do
     context 'when creating a new StampForm' do
       let(:form) { StampForm.new(name: 'stamp1', group_editors: 'zombies,pirates', user_consumers: 'zogh') }
 
-      it 'calls create_stamps' do
+      it 'calls create_objects' do
         expect(form).to receive(:create_objects)
+        expect(form).not_to receive(:update_objects)
         form.save
       end
     end
@@ -61,20 +62,17 @@ RSpec.describe StampForm do
     context 'when updating a StampForm' do
       let(:form) { StampForm.new(id: '123', name: 'stamp1', group_editors: 'zombies,pirates', user_consumers: 'zogh') }
 
-      it 'calls create_stamps' do
+      it 'calls update_objects' do
         expect(form).to receive(:update_objects)
+        expect(form).not_to receive(:create_objects)
         form.save
       end
     end
   end
 
-  describe 'from_stamp' do
+  describe '#from_stamp' do
     let(:form) { StampForm.new(id: '123', name: 'stamp1', group_editors: 'pirates') }
-
-    let(:stamp) {
-      n = build(:stamp, id: '321', name: 'stamp1', group_editors: ['pirates'])
-      n
-    }
+    let(:stamp) { build(:stamp, id: '321', name: 'stamp1', group_editors: ['pirates']) }
 
     it 'calls create_stamps' do
       expect(StampForm).to receive(:attributes_from_stamp).and_return({ id: stamp.id, name: stamp.name, group_editors: ['pirates']})

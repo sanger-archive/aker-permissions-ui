@@ -5,12 +5,13 @@ RSpec.feature "Stamps", type: :feature do
   let(:user) { create(:user, email: 'jeff') }
 
   describe 'Stamps' do
+    before :each do
+      sign_in(user)
+      allow_any_instance_of(StampsController).to receive(:current_user).and_return(user)
+    end
 
     context '#index' do
       before :each do
-        sign_in(user)
-        allow_any_instance_of(StampsController).to receive(:current_user).and_return(user)
-
         stamp1 = double('stamp', id: SecureRandom.uuid, name: 'stamp1', owner_id: 'jeff')
         stamp2 = double('stamp', id: SecureRandom.uuid, name: 'stamp2', owner_id: 'dirk')
 
@@ -25,6 +26,11 @@ RSpec.feature "Stamps", type: :feature do
       it 'shows all stamps' do
         expect(page).to have_current_path(root_path)
         expect(page).to have_selector('tr', count: @all_stamps.size+1)
+      end
+
+      it 'will let you create a new stamp' do
+        visit root_path
+        expect(page).to have_content('Create New Stamp')
       end
 
       it 'shows Edit and delete for stamps that the current user owns' do
@@ -43,9 +49,6 @@ RSpec.feature "Stamps", type: :feature do
 
     context '#show' do
       before :each do
-        sign_in(user)
-        allow_any_instance_of(StampsController).to receive(:current_user).and_return(user)
-
         @stamp1 = double('stamp', id: SecureRandom.uuid, name: 'stamp1', owner_id: 'jeff')
         @stamp2 = double('stamp', id: SecureRandom.uuid, name: 'stamp2', owner_id: 'dirk')
 
@@ -69,9 +72,6 @@ RSpec.feature "Stamps", type: :feature do
 
     context '#edit' do
       before :each do
-        sign_in(user)
-        allow_any_instance_of(StampsController).to receive(:current_user).and_return(user)
-
         @stamp1 = double('stamp', id: SecureRandom.uuid, name: 'stamp1', owner_id: 'jeff')
         @stamp2 = double('stamp', id: SecureRandom.uuid, name: 'stamp2', owner_id: 'dirk')
 
@@ -94,10 +94,7 @@ RSpec.feature "Stamps", type: :feature do
     end
 
     context '#update' do
-        before :each do
-        sign_in(user)
-        allow_any_instance_of(StampsController).to receive(:current_user).and_return(user)
-
+      before :each do
         @stamp1 = double('stamp', id: SecureRandom.uuid, name: 'stamp1', owner_id: 'jeff')
         @stamp2 = double('stamp', id: SecureRandom.uuid, name: 'stamp2', owner_id: 'dirk')
 
@@ -122,6 +119,7 @@ RSpec.feature "Stamps", type: :feature do
         click_link("Edit")
         fill_in('Name', :with => 'newstampname')
         click_button("Update")
+        expect(page).to have_current_path(root_path)
         expect(page).to have_content('newstampname')
         expect(page).not_to have_content('stamp1')
       end
@@ -129,9 +127,6 @@ RSpec.feature "Stamps", type: :feature do
 
     context '#destroy' do
       before :each do
-        sign_in(user)
-        allow_any_instance_of(StampsController).to receive(:current_user).and_return(user)
-
         @stamp1 = double('stamp', id: SecureRandom.uuid, name: 'stamp1', owner_id: 'jeff')
         @stamp2 = double('stamp', id: SecureRandom.uuid, name: 'stamp2', owner_id: 'dirk')
 
@@ -152,6 +147,7 @@ RSpec.feature "Stamps", type: :feature do
         allow(StampClient::Stamp).to receive(:find_with_permissions).and_return([@stamp1])
         allow(@stamp1).to receive(:destroy).and_return true
         click_link('Delete')
+        expect(page).to have_current_path(root_path)
         page.has_content?('Stamp deleted')
       end
     end

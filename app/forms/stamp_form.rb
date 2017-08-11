@@ -1,8 +1,4 @@
 class StampForm
-
-  # ActiveModel plumbing to make `form_for` work
-  extend ActiveModel::Naming
-  include ActiveModel::Conversion
   include ActiveModel::Validations
 
   validates :name, presence: true, format: { with: /\A[A-Za-z0-9_-]+\z/ }
