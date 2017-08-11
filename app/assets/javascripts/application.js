@@ -19,6 +19,7 @@
 $(document).ready(function(){
   $("a[data-remote]").on("ajax:success", function (e, data, status, xhr) {
     $("#viewEditStamp").html($("#viewEditStamp", xhr.responseText).html());
+    aker.attachSelectize($("#viewEditStamp"));
   }).on("ajax:error", function(e, xhr, status, error) {
     $("#viewEditStamp").append("<p>ERROR</p>");
   });
@@ -26,4 +27,28 @@ $(document).ready(function(){
   $("#viewEditStamp").on('show.bs.modal', function(e) {
     $("#viewEditStamp").html('');
   })
+
+  aker.attachSelectize(document.body);
 });
+
+$(document).on("turbolinks:load", function() {
+  aker.attachSelectize(document.body);
+});
+
+window.aker = {};
+window.aker.attachSelectize = function(node) {
+  $("[data-behavior~=selectize]", node).each(window.aker.selectize_element);
+};
+window.aker.selectize_element = function(index, el) {
+  $(el).selectize({
+    plugins: ['remove_button'],
+    delimiter: ',',
+    persist: false,
+    create: function(input) {
+      return {
+          value: input,
+          text: input
+      }
+    }
+  });
+};
