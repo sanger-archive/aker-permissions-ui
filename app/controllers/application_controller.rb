@@ -1,3 +1,5 @@
 class ApplicationController < ActionController::Base
-  include AkerAuthenticationGem::AuthController
+  include JWTCredentials
+
+  helper_method :jwt_provided?
 end

@@ -1,5 +1,6 @@
 class StampsController < ApplicationController
-  include JWTCredentials
+
+  before_action :require_jwt
 
   before_action :current_stamp, except: :create
 
@@ -46,15 +47,7 @@ class StampsController < ApplicationController
     redirect_to root_path
   end
 
-  def current_user
-    u = session["user"]
-    if u.is_a? Hash
-      u = User.new(u)
-    end
-    u
-  end
-
-  private
+private
 
   def current_stamp
     @stamp = (params[:id] && StampClient::Stamp.find_with_permissions(params[:id]).first)
@@ -66,6 +59,12 @@ class StampsController < ApplicationController
 
   def make_stamp_form
     @stampform = StampForm.from_stamp(@stamp)
+  end
+
+  def require_jwt
+    unless current_user
+      redirect_to Rails.configuration.login_url
+    end
   end
 
 end

@@ -1,12 +1,12 @@
 require 'rails_helper'
+require 'ostruct'
 
 RSpec.feature "Stamps", type: :feature do
 
-  let(:user) { create(:user, email: 'jeff') }
+  let(:user) { OpenStruct.new(email: 'jeff', groups: ['world']) }
 
   describe 'Stamps' do
     before :each do
-      sign_in(user)
       allow_any_instance_of(StampsController).to receive(:current_user).and_return(user)
     end
 

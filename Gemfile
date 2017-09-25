@@ -44,10 +44,8 @@ gem 'bootstrap_form'
 gem 'pry'
 
 gem 'json_api_client', github: 'sanger/json_api_client'
-gem 'aker_credentials_gem', github: 'sanger/aker-credentials'
-gem 'aker_authentication_gem', github: 'sanger/aker-authentication'
+gem 'aker_credentials_gem', github: 'sanger/aker-credentials', branch: 'noguest'
 gem 'aker_stamp_client', github: 'sanger/aker-stamp-client'
-
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
