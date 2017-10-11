@@ -1,7 +1,5 @@
 class StampsController < ApplicationController
 
-  before_action :require_jwt
-
   before_action :current_stamp, except: :create
 
   def index
@@ -59,12 +57,6 @@ private
 
   def make_stamp_form
     @stampform = StampForm.from_stamp(@stamp)
-  end
-
-  def require_jwt
-    unless current_user
-      redirect_to Rails.configuration.login_url
-    end
   end
 
 end
