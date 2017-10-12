@@ -44,7 +44,7 @@ gem 'bootstrap_form'
 gem 'pry'
 
 gem 'json_api_client', github: 'sanger/json_api_client'
-gem 'aker_credentials_gem', github: 'sanger/aker-credentials', branch: 'quick-sso'
+gem 'aker_credentials_gem', github: 'sanger/aker-credentials'
 gem 'aker_stamp_client', github: 'sanger/aker-stamp-client'
 
 group :development, :test do
