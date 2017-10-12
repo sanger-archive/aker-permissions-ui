@@ -4,20 +4,26 @@ require 'ostruct'
 RSpec.describe StampsController, type: :controller do
 
   let(:user) { OpenStruct.new(email: 'jeff', groups: ['world']) }
+  let(:jwt) do
+    iat = Time.now.to_i
+    exp = iat + Rails.application.config.jwt_exp_time
+    nbf = iat - Rails.application.config.jwt_nbf_time
+    payload = { data: { email: user.email, groups: user.groups }, exp: exp, nbf: nbf, iat: iat }
+    JWT.encode payload, Rails.application.config.jwt_secret_key, 'HS256'
+  end
+  let(:login_url) { Rails.configuration.login_url+'?'+{redirect_url: request.original_url}.to_query }
 
   before do
-    if user
-      allow_any_instance_of(StampsController).to receive(:current_user).and_return(user)
-    end
+    request.cookies[:aker_user_jwt] = jwt if jwt
   end
 
   describe '#index' do
     context 'when no JWT is included' do
-      let(:user) { nil }
+      let(:jwt) { nil }
 
       it 'redirects to the login page' do
         get :index
-        expect(response).to redirect_to(Rails.configuration.login_url)
+        expect(response).to redirect_to(login_url)
       end
     end
 

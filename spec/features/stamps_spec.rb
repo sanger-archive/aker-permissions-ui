@@ -5,11 +5,27 @@ RSpec.feature "Stamps", type: :feature do
 
   let(:user) { OpenStruct.new(email: 'jeff', groups: ['world']) }
 
-  describe 'Stamps' do
-    before :each do
-      allow_any_instance_of(StampsController).to receive(:current_user).and_return(user)
-    end
+  let(:jwt) do
+    iat = Time.now.to_i
+    exp = iat + Rails.application.config.jwt_exp_time
+    nbf = iat - Rails.application.config.jwt_nbf_time
+    payload = { data: { email: user.email, groups: user.groups }, exp: exp, nbf: nbf, iat: iat }
+    JWT.encode payload, Rails.application.config.jwt_secret_key, 'HS256'
+  end
+  let(:login_url) { Rails.configuration.login_url+'?'+{redirect_url: request.original_url}.to_query }
 
+  def set_cookie(key, value)
+    headers = {}
+    Rack::Utils.set_cookie_header!(headers, key, value)
+    cookie_string = headers['Set-Cookie']
+    Capybara.current_session.driver.browser.set_cookie(cookie_string)
+  end
+
+  before do
+    set_cookie(:aker_user_jwt, jwt) if jwt
+  end
+
+  describe 'Stamps' do
     context '#index' do
       before :each do
         stamp1 = double('stamp', id: SecureRandom.uuid, name: 'stamp1', owner_id: 'jeff')
