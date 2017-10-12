@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/sanger/aker-credentials.git
-  revision: 328e5a64396ce743498ca204aa4c8e6d187c7bc1
+  revision: 468b5461d79be0e144444ef0ea3503f3df491be6
   branch: quick-sso
   specs:
     aker_credentials_gem (0.2.0)
