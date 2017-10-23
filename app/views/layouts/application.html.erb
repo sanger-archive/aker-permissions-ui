@@ -25,12 +25,13 @@
             <li><%= link_to 'Creation', "#" %></li>
           </ul> -->
           <ul class="nav navbar-nav navbar-right">
+            <li><p class="navbar-text">Logged in as <%= current_user.email %></p></li>
             <li>
               <% if jwt_provided? %>
                 <%= link_to 'Log out', Rails.configuration.logout_url, method: :delete if Rails.configuration.logout_url %>
               <% else %>
                 <%= link_to 'Log in', Rails.configuration.login_url if Rails.configuration.login_url %>
-              <% end %>  
+              <% end %>
             </li>
           </ul>
         </div>
