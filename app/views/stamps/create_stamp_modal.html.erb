@@ -8,7 +8,7 @@
             <div class="modal-body">
               <%= bootstrap_form_for(:stamp, url: stamps_path, method: :post) do |f| %>
                 <%= render "stamp_form", f: f, readonly: false %>
-                <%= f.submit("Create") %>
+                <%= f.submit "Create", class: "btn btn-success"  %>
               <% end %>
             </div>
         </div>
