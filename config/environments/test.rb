@@ -50,4 +50,10 @@ Rails.application.configure do
   config.login_url = 'http://log.in.url'
   config.logout_url = 'http://log.out.url'
 
+  config.urls = { submission: "",
+                  permissions: "",
+                  sets: "",
+                  projects: "",
+                  work_orders: "" }
+
 end
