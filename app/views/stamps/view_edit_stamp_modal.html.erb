@@ -10,7 +10,7 @@
               <%= bootstrap_form_for(@stampform, url: stamp_path(@stamp), method: :put, as: :stamp) do |f| %>
                 <%= render "stamp_form", f: f, readonly: readonly %>
                 <% if !readonly %>
-                  <%= f.submit 'Update' %>
+                  <%= f.submit 'Update', class: "btn btn-primary" %>
                 <% end %>
               <% end %>
             <% end %>
