@@ -76,6 +76,6 @@ group :development, :test do
   gem 'poltergeist'
   gem 'launchy'
   gem 'selenium-webdriver'
-  gem 'factory_girl_rails'
+  gem 'factory_bot_rails'
   gem 'rails-controller-testing'
 end

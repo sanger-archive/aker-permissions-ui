@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory(:stamp, class: StampClient::Stamp) do
 
   end
