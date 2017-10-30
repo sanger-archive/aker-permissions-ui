@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+
+# Force git gems to use secure HTTPS
 git_source(:github) do |repo_name|
   repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
   "https://github.com/#{repo_name}.git"
@@ -16,11 +18,8 @@ gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
-
 gem 'pg'
-
 gem 'zipkin-tracer'
-
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.2'
 # Use jquery as the JavaScript library
@@ -33,19 +32,41 @@ gem 'jbuilder', '~> 2.5'
 # gem 'redis', '~> 3.0'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
-
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
-
 # For those styles
 gem 'bootstrap-sass', '~> 3.3.6'
 gem 'bootstrap_form'
-
 gem 'pry'
+# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
+
+###
+# Sanger gems
+###
 gem 'json_api_client', github: 'sanger/json_api_client'
 gem 'aker_credentials_gem', github: 'sanger/aker-credentials'
 gem 'aker_stamp_client', github: 'sanger/aker-stamp-client'
+
+
+###
+# Groups
+###
+group :development do
+  # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
+  gem 'web-console', '>= 3.3.0'
+  gem 'listen', '>= 3.0.5', '< 3.2'
+  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
+  gem 'spring'
+  gem 'spring-watcher-listen', '~> 2.0.0'
+end
+
+group :test do
+  gem 'rspec-rails'
+  gem 'webmock'
+  gem 'timecop'
+  # Use sqlite3 as the database for Active Record
+  gem 'sqlite3'
+end
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -58,23 +79,3 @@ group :development, :test do
   gem 'factory_girl_rails'
   gem 'rails-controller-testing'
 end
-
-group :test do
-  gem 'rspec-rails'
-  gem 'webmock'
-  gem 'timecop'
-  # Use sqlite3 as the database for Active Record
-  gem 'sqlite3'
-end
-
-group :development do
-  # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
-  gem 'web-console', '>= 3.3.0'
-  gem 'listen', '>= 3.0.5', '< 3.2'
-  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  gem 'spring'
-  gem 'spring-watcher-listen', '~> 2.0.0'
-end
-
-# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
