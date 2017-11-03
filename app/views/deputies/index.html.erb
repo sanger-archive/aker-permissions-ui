@@ -1,0 +1,17 @@
+<div class="row">
+  <div class="col-md-12">
+    <%= link_to 'Assign Deputies', new_deputy_path, { remote: true,
+                                                      class: 'btn btn-success vcenter',
+                                                      'data-target': "#createDeputy",
+                                                      'data-toggle': "modal" } %>
+    <%= render template: 'deputies/create_deputy_modal' %>
+  </div>
+</div>
+
+<% # Display the deputy table %>
+<div class="row">
+  <div class="col-md-12">
+    <hr>
+    <%= render "deputy_table" %>
+  </div>
+</div>

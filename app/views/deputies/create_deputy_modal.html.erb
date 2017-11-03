@@ -1,0 +1,16 @@
+<div class="modal fade" id="createDeputy" role="dialog" style='top:100px;'>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Create New Deputy</h4>
+      </div>
+      <div class="modal-body">
+        <%= bootstrap_form_for(:deputy, url: deputies_path, method: :post) do |f| %>
+          <%= render "deputy_form", f: f %>
+          <%= f.submit "Create", class: "btn btn-success"  %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

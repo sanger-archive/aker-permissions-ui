@@ -1,0 +1,59 @@
+<% # Partial to display information about a deputy and provide a button to delete a deputy %>
+<h5><%= user %></h5>
+<div class="row">
+  <div class="col-md-6">
+    <strong>Users who can (un)apply stamps to my material.</strong>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>User</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% deputies["user_deputies"].each do |id, user| %>
+          <tr>
+            <td><%= user %></td>
+            <td>
+              <%= link_to 'Delete', deputy_path(id),
+                    method: :delete,
+                    class: 'btn btn-danger',
+                    style: 'float: right',
+                    data: { confirm: 'Are you sure you want to delete this deputy?' } %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div class="col-md-6">
+    <strong>Groups who can (un)apply stamps to my material.</strong>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Group</th>
+          <% if user == current_user.email %>
+            <th></th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody>
+        <% deputies["group_deputies"].each do |id, group| %>
+          <tr>
+            <td><%= group %></td>
+            <% if user == current_user.email %>
+              <td>
+                <%= link_to 'Delete', deputy_path(id),
+                      method: :delete,
+                      class: 'btn btn-danger',
+                      style: 'float: right',
+                      data: { confirm: 'Are you sure you want to delete this deputy?' } %>
+              </td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<hr>
