@@ -66,6 +66,12 @@ group :test do
   gem 'timecop'
   # Use sqlite3 as the database for Active Record
   gem 'sqlite3'
+  # Code coverage for Ruby 1.9+ with a powerful configuration library and automatic merging of
+  # coverage across test suites - https://github.com/colszowka/simplecov
+  gem 'simplecov', require: false
+  # SimpleCov formatter to generate a simple index.html Rcov style
+  # https://github.com/fguillen/simplecov-rcov
+  gem 'simplecov-rcov'
 end
 
 group :development, :test do
