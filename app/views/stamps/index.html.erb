@@ -1,6 +1,9 @@
 <div class="row">
   <div class="col-md-12">
-    <%= link_to 'Create New Stamp', new_stamp_url, { remote: true, class: 'btn btn-success vcenter', 'data-target': "#createStamp", 'data-toggle': "modal" } %>
+    <%= link_to 'Create New Stamp', new_stamp_path, { remote: true,
+                                                      class: 'btn btn-success vcenter',
+                                                      'data-target': "#createStamp",
+                                                      'data-toggle': "modal" } %>
     <%= render template: 'stamps/create_stamp_modal' %>
   </div>
 </div>

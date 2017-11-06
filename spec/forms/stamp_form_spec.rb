@@ -78,7 +78,7 @@ RSpec.describe StampForm do
       expect(StampForm).to receive(:attributes_from_stamp).and_return({ id: stamp.id, name: stamp.name, group_editors: ['pirates']})
       expect(StampForm).to receive(:new).with({ id: stamp.id, name: stamp.name, group_editors: ['pirates']})
 
-      stamp_form = StampForm.from_stamp(stamp)
+      StampForm.from_stamp(stamp)
     end
   end
 

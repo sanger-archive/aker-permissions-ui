@@ -1,20 +1,22 @@
 <tr>
-  <td><%=  stamp.name %></td>
-  <td><%=  stamp.owner_id %></td>
-  <td>
-    <!-- If the owner of the stamp is the current user -->
+  <td><%= stamp.name %></td>
+  <td><%= stamp.owner_id %></td>
+  <td align="right">
+    <% # If the owner of the stamp is the current user %>
     <% if @owned_stamps.map(&:id).include?(stamp.id) %>
-      <%= link_to 'Edit', edit_stamp_path(stamp), { remote: true, class: 'btn btn-primary', 'data-target': "#viewEditStamp", 'data-toggle': "modal" } %>
+      <%= link_to 'Edit', edit_stamp_path(stamp), { remote: true,
+                                                    class: 'btn btn-primary',
+                                                    'data-target': "#viewEditStamp",
+                                                    'data-toggle': "modal" } %>
       <%= link_to 'Delete', stamp_path(stamp),
             method: :delete,
             class: 'btn btn-danger',
             data: { confirm: 'Are you sure you want to delete this stamp?' } %>
     <% else %>
-      <div class="row">
-        <div class="col-md-12">
-          <%= link_to 'View', stamp_path(stamp), { remote: true, class: 'btn btn-default', 'data-target': "#viewEditStamp", 'data-toggle': "modal" } %>
-        </div>
-      </div>
+      <%= link_to 'View', stamp_path(stamp), { remote: true,
+                                               class: 'btn btn-default',
+                                               'data-target': "#viewEditStamp",
+                                               'data-toggle': "modal" } %>
     <% end %>
   </td>
 </tr>
