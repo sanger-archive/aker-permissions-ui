@@ -47,7 +47,7 @@ RSpec.feature "Deputiess", type: :feature do
         expect(page).to have_content('Assign Deputies')
       end
 
-      it 'shows Delete for stamps that the current user owns' do
+      it 'shows Delete for deputies of the current user' do
         expect(find('tr', text: 'deputy1')).to have_content("Delete")
       end
     end

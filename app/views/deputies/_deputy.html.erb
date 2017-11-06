@@ -7,19 +7,23 @@
       <thead>
         <tr>
           <th>User</th>
-          <th></th>
+          <% if user == current_user.email %>
+            <th></th>
+          <% end %>
         </tr>
       </thead>
       <tbody>
-        <% deputies["user_deputies"].each do |id, user| %>
+        <% deputies["user_deputies"].each do |id, user_dep| %>
           <tr>
-            <td><%= user %></td>
-            <td align="right">
-              <%= link_to 'Delete', deputy_path(id),
-                    method: :delete,
-                    class: 'btn btn-danger',
-                    data: { confirm: 'Are you sure you want to delete this deputy?' } %>
-            </td>
+            <td><%= user_dep %></td>
+            <% if user == current_user.email %>
+              <td align="right">
+                <%= link_to 'Delete', deputy_path(id),
+                      method: :delete,
+                      class: 'btn btn-danger',
+                      data: { confirm: 'Are you sure you want to delete this deputy?' } %>
+              </td>
+            <% end %>
           </tr>
         <% end %>
       </tbody>

@@ -1,7 +1,7 @@
 class DeputyForm
   include ActiveModel::Validations
 
-  validates :user_deputies, allow_blank: true, format: { with: /\A[A-Za-z0-9 ,._@-]+\z/ }
+  validates :user_deputies, allow_blank: true, format: { with: /\A[A-Za-z0-9,._@-]+\z/ }
   validates :group_deputies, allow_blank: true, format: { with: /\A[A-Za-z0-9 ,_]+\z/ }
 
   ATTRIBUTES = [:id, :user_deputies, :group_deputies]

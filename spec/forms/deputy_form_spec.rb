@@ -20,7 +20,9 @@ RSpec.describe DeputyForm do
       let(:form1) { DeputyForm.new() }
       let(:form2_1) { DeputyForm.new(user_deputies: 'zs56d87fvbc`/;') }
       let(:form2_2) { DeputyForm.new(group_deputies: 'zs56d87fvbc`/;') }
-      let(:form3) { DeputyForm.new(user_deputies: 'pirates zombies, clowns', group_deputies: 'zogh') }
+      let(:form2_3) { DeputyForm.new(user_deputies: 'a b') }
+      let(:form2_4) { DeputyForm.new(group_deputies: 'abc@') }
+      let(:form3) { DeputyForm.new(user_deputies: 'zombies,clowns', group_deputies: 'zogh') }
       let(:form4) { DeputyForm.new(group_deputies: 'zogh653,dirk_123') }
 
       before do
@@ -37,6 +39,10 @@ RSpec.describe DeputyForm do
         expect(@result).to be false
         @result = form2_2.save
         expect(@result).to be false
+        @result = form2_3.save
+        expect(@result).to be false
+        @result = form2_4.save
+        expect(@result).to be false
       end
 
       it "is valid with all possible attributes" do
@@ -48,10 +54,11 @@ RSpec.describe DeputyForm do
     end
 
     context 'when creating a new DeputyForm' do
-      let(:form) { DeputyForm.new(user_deputies: 'pirates zombies, clowns', group_deputies: 'zogh') }
+      let(:form) { DeputyForm.new(user_deputies: 'zombies,clowns', group_deputies: 'zogh') }
 
       it 'calls create_objects' do
-        expect(form).to receive(:create_objects)
+        expect(form).to receive(:create_objects).and_return(true)
+
         form.save
       end
     end

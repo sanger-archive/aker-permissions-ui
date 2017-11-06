@@ -32,64 +32,72 @@ RSpec.describe DeputiesController, type: :controller do
         deputy2 = double('deputy', id: SecureRandom.uuid, user_email: 'dirk', deputy: 'deputy2')
 
         @all_deputies = [deputy1, deputy2]
-        allow(StampClient::Deputy).to receive(:all).and_return(@all_deputies)
       end
 
       it 'has a list of deputies belonging to the current user' do
+        expect(StampClient::Deputy).to receive(:all).and_return(@all_deputies)
+
         get :index, params: {}
-        deputies = controller.instance_variable_get("@all_deputies")
+        
+        deputies = controller.instance_variable_get('@all_deputies')
         expect(deputies.length).to eq @all_deputies.size
       end
     end
   end
 
   describe 'CREATE #create' do
-    it "should send a create request to the stamp client" do
-      deputy3 = double('deputy', id: SecureRandom.uuid, user_email: 'mary', deputy: 'deputy3')
-      expect(StampClient::Deputy).to receive(:create).and_return(deputy3)
-
-      post :create, params: { deputy: { user_deputies: "mary" } }
-      expect(flash[:success]).to match('Deputy created')
+    DEP_CREATED_MSG = 'Deputy created'
+    before do
+      @deputy = double('deputy', id: SecureRandom.uuid, user_email: 'mary', deputy: 'jeff')
     end
 
-    it "should show error flash when stamp client fails to create deputy" do
+    it 'should send a create request to the StampClient' do
+      expect(StampClient::Deputy).to receive(:create).and_return(@deputy)
+
+      post :create, params: { deputy: { user_deputies: @deputy.deputy } }
+
+      expect(flash[:success]).to match(DEP_CREATED_MSG)
+    end
+
+    it 'should show error flash when StampClient fails to create deputy' do
       expect(StampClient::Deputy).to receive(:create).and_return false
 
-      post :create, params: { deputy: { user_deputies: "mary" } }
-      expect(flash[:danger]).to match("Failed to create deputy")
+      post :create, params: { deputy: { user_deputies: @deputy.deputy } }
+
+      expect(flash[:danger]).to match('Failed to create deputy')
     end
 
-    it "should show success flash when stamp client creates stamp" do
+    it 'should show success flash when StampClient creates stamp' do
       deputy4 = double('deputy', id: SecureRandom.uuid, user_email: 'mary', deputy: 'deputy4')
-      expect(StampClient::Deputy).to receive(:create).and_return(deputy4)
+      allow(StampClient::Deputy).to receive(:create).and_return(deputy4)
 
-      post :create, params: { deputy: { user_deputies: "mary" } }
-      expect(flash[:success]).to match('Deputy created')
+      post :create, params: { deputy: { user_deputies: @deputy.deputy } }
+
+      expect(flash[:success]).to match(DEP_CREATED_MSG)
     end
   end
 
   describe 'DELETE #destroy' do
     before do
       @deputy1 = double('deputy', id: SecureRandom.uuid, user_email: 'mary', deputy: 'deputy1')
-      @deputy2 = double('deputy', id: SecureRandom.uuid, user_email: 'jeff', deputy: 'deputy2')
+      controller.instance_variable_set(:@deputy, @deputy1)
     end
 
-    it "should show success flash when stamp client deletes deputy" do
-      controller.instance_variable_set(:@deputy, @deputy1)
-      expect(StampClient::Deputy).to receive(:find).and_return([@deputy1])
-      allow(@deputy1).to receive(:destroy).and_return true
+    it 'should show success flash when StampClient deletes deputy' do
+      expect(StampClient::Deputy).to receive(:find).with(@deputy1.id).and_return([@deputy1])
+      expect(@deputy1).to receive(:destroy).and_return(true)
 
-      delete :destroy, params: { id: @deputy1 }
-      expect(@deputy1.destroy).not_to be_nil
+      delete :destroy, params: { id: @deputy1.id }
+
       expect(flash[:success]).to match('Deputy deleted')
     end
 
-    it "should show error flash when stamp client fails to delete deputy" do
-      controller.instance_variable_set(:@deputy, @deputy1)
-      expect(StampClient::Deputy).to receive(:find).and_return([@deputy1])
-      expect(@deputy1).to receive(:destroy)
+    it 'should show error flash when StampClient fails to delete deputy' do
+      expect(StampClient::Deputy).to receive(:find).with(@deputy1.id).and_return([@deputy1])
+      expect(@deputy1).to receive(:destroy).and_return(false)
 
-      delete :destroy, params: { id: @deputy1 }
+      delete :destroy, params: { id: @deputy1.id }
+
       expect(flash[:danger]).to match('Failed to delete deputy')
     end
   end
