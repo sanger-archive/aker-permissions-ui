@@ -1,0 +1,13 @@
+<% # Show the current user's deputies first %>
+<% if @collated_deputies.key?(current_user.email) %>
+  <%= render partial: "deputy", locals: { user: current_user.email,
+                                          deputies: @collated_deputies[current_user.email] } %>
+
+  <% # Remove the current user since we have already displayed all their deputies %>
+  <% @collated_deputies.delete(current_user.email) %>
+<% end %>
+
+<% # Show the remaining deputies %>
+<% @collated_deputies.each do |user_email, deputies| %>
+  <%= render partial: "deputy", locals: { user: user_email, deputies: deputies } %>
+<% end %>

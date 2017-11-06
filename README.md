@@ -1,24 +1,14 @@
-# README
+# Aker - Material Permissions Manager
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+An application to manage the permissions or "stamps" applied to materials as well as deputies assigned to users.
 
-Things you may want to cover:
+# Installation
+## Dev environment
+1. Configure or update the ports to services in `development.rb`.
+2. Setup the database using `rake db:setup`. Alternatively, use:
+  * `rake db:drop db:create db:migrate`
+  * Seed the database with `rade db:seed` (first verify that your username has been added to the seed)
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+# Testing
+## Running tests
+To execute the tests, run: `bundle exec rspec` or simply `rspec`

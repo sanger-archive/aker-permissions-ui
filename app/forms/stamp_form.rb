@@ -7,9 +7,10 @@ class StampForm
 
   ATTRIBUTES = [:id, :name, :user_editors, :group_editors, :user_consumers, :group_consumers]
 
-  attr_accessor *ATTRIBUTES
+  attr_accessor(*ATTRIBUTES)
 
   def initialize(attributes = {})
+    # assign attributes dynamically - https://stackoverflow.com/a/26193804
     ATTRIBUTES.each do |attribute|
       value = attributes[attribute]
       send("#{attribute}=", value)
