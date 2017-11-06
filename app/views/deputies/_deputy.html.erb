@@ -1,12 +1,11 @@
 <% # Partial to display information about a deputy and provide a button to delete a deputy %>
-<h5><%= user %></h5>
+<h5>Deputies of <%= user %></h5>
 <div class="row">
   <div class="col-md-6">
-    <strong>Users who can (un)apply stamps to my material.</strong>
     <table class="table table-striped">
       <thead>
         <tr>
-          <th>User</th>
+          <th>User (<%= deputies["user_deputies"].length %>)</th>
           <% if user == current_user.email %>
             <th></th>
           <% end %>
@@ -30,11 +29,10 @@
     </table>
   </div>
   <div class="col-md-6">
-    <strong>Groups who can (un)apply stamps to my material.</strong>
     <table class="table table-striped">
       <thead>
         <tr>
-          <th>Group</th>
+          <th>Group (<%= deputies["group_deputies"].length %>)</th>
           <% if user == current_user.email %>
             <th></th>
           <% end %>
