@@ -12,18 +12,22 @@
         </tr>
       </thead>
       <tbody>
-        <% deputies["user_deputies"].each do |id, user_dep| %>
-          <tr>
-            <td><%= user_dep %></td>
-            <% if user == current_user.email %>
-              <td align="right">
-                <%= link_to 'Delete', deputy_path(id),
-                      method: :delete,
-                      class: 'btn btn-danger',
-                      data: { confirm: 'Are you sure you want to delete this deputy?' } %>
-              </td>
-            <% end %>
-          </tr>
+        <% if user == current_user.email %>
+          <% deputies["user_deputies"].each do |id, user_dep| %>
+            <tr>
+              <td><%= user_dep %></td>
+                <td align="right">
+                  <%= link_to 'Delete', deputy_path(id),
+                        method: :delete,
+                        class: 'btn btn-danger',
+                        data: { confirm: 'Are you sure you want to delete this deputy?' } %>
+                </td>
+            </tr>
+          <% end %>
+        <% else %>
+        <tr>
+          <td><%= deputies["user_deputies"].values.join(', ') %></td>
+        </tr>
         <% end %>
       </tbody>
     </table>
@@ -39,17 +43,21 @@
         </tr>
       </thead>
       <tbody>
-        <% deputies["group_deputies"].each do |id, group| %>
+        <% if user == current_user.email %>
+          <% deputies["group_deputies"].each do |id, group| %>
+            <tr>
+              <td><%= group %></td>
+                <td align="right">
+                  <%= link_to 'Delete', deputy_path(id),
+                        method: :delete,
+                        class: 'btn btn-danger',
+                        data: { confirm: 'Are you sure you want to delete this deputy?' } %>
+                </td>
+            </tr>
+          <% end %>
+        <% else %>
           <tr>
-            <td><%= group %></td>
-            <% if user == current_user.email %>
-              <td align="right">
-                <%= link_to 'Delete', deputy_path(id),
-                      method: :delete,
-                      class: 'btn btn-danger',
-                      data: { confirm: 'Are you sure you want to delete this deputy?' } %>
-              </td>
-            <% end %>
+            <td><%= deputies["group_deputies"].values.join(', ') %></td>
           </tr>
         <% end %>
       </tbody>
