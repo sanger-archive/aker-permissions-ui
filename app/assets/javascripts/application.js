@@ -16,7 +16,7 @@
 //= require bootstrap-sprockets
 //= require_tree .
 
-$(document).ready(function(){
+$(document).on("turbolinks:load", function() {
   $("a[data-remote]").on("ajax:success", function (e, data, status, xhr) {
     $("#viewEditStamp").html($("#viewEditStamp", xhr.responseText).html());
     aker.attachSelectize($("#viewEditStamp"));
