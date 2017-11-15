@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'ostruct'
 
-RSpec.feature "Deputiess", type: :feature do
+RSpec.feature "Deputies", type: :feature do
 
   let(:user) { OpenStruct.new(email: 'jeff', groups: ['world']) }
 
@@ -44,7 +44,7 @@ RSpec.feature "Deputiess", type: :feature do
 
       it 'will let you create a new deputy' do
         visit deputies_path
-        expect(page).to have_content('Assign Deputies')
+        expect(page).to have_content('Assign Sample Guardian Deputies')
       end
 
       it 'shows Delete for deputies of the current user' do
