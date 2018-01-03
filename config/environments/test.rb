@@ -44,8 +44,6 @@ Rails.application.configure do
   config.stamp_url = 'http://localhost:7000/api/v1/'
 
   config.jwt_secret_key = 'test'
-  config.jwt_exp_time = 2 * 60
-  config.jwt_nbf_time = 1 * 60
 
   config.login_url = 'http://log.in.url'
   config.logout_url = 'http://log.out.url'
