@@ -1,8 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe DeputiesController, type: :controller do
+  # These could be anything
   JWT_NBF_TIME = 60
-  JWT_EXP_TIME = 3600
+  JWT_EXP_TIME = 600
 
   let(:user) { OpenStruct.new(email: 'jeff', groups: ['world']) }
   let(:jwt) do
