@@ -2,12 +2,14 @@ require 'rails_helper'
 require 'ostruct'
 
 RSpec.describe StampsController, type: :controller do
+  JWT_NBF_TIME = 60
+  JWT_EXP_TIME = 3600
 
   let(:user) { OpenStruct.new(email: 'jeff', groups: ['world']) }
   let(:jwt) do
     iat = Time.now.to_i
-    exp = iat + Rails.application.config.jwt_exp_time
-    nbf = iat - Rails.application.config.jwt_nbf_time
+    exp = iat + JWT_EXP_TIME
+    nbf = iat - JWT_NBF_TIME
     payload = { data: { email: user.email, groups: user.groups }, exp: exp, nbf: nbf, iat: iat }
     JWT.encode payload, Rails.application.config.jwt_secret_key, 'HS256'
   end
