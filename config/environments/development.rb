@@ -57,8 +57,6 @@ Rails.application.configure do
   config.stamp_url = 'http://localhost:7000/api/v1/'
 
   config.jwt_secret_key = 'development'
-  config.jwt_exp_time = 2 * 60
-  config.jwt_nbf_time = 1 * 60
 
   config.default_jwt_user = { email: ENV.fetch('USER', 'user')+'@sanger.ac.uk', groups: ['world'] }
 
