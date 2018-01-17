@@ -9,6 +9,7 @@ Rails.application.config.after_initialize do
     ENV['https_proxy'] = nil
 
     # Avoid checking SSL certs when going to the stamp service.
+    # https://github.com/lostisland/faraday/wiki/Setting-up-SSL-certificates
     # TODO: This should be fixed in the future by adding the stamp service certificate to the stamp
     # UI app or signing the stamp certificate with from the stamp UI app
     connection.faraday.ssl.verify = false
