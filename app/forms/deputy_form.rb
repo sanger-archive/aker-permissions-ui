@@ -53,13 +53,10 @@ class DeputyForm
           deputy += '@sanger.ac.uk' unless deputy.include?('@')
         end
 
-        # Encapsulate the saving of a user or group deputy within a transaction
-        ActiveRecord::Base.transaction do
-          deputy = StampClient::Deputy.create({deputy: deputy})
+        deputy = StampClient::Deputy.create({deputy: deputy})
 
-          # TODO: handle errors correctly
-          raise 'unable to save deputy' if !deputy
-        end
+        # TODO: handle errors correctly
+        raise 'unable to save deputy' if !deputy
       end
     end
 
