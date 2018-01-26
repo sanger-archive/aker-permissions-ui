@@ -28,23 +28,19 @@ class StampForm
   private
 
   def create_objects
-    ActiveRecord::Base.transaction do
-      stamp = StampClient::Stamp.create({name: name})
-      stamp.set_permissions_to(convert_permissions)
-      true
-    end
-  rescue
+    stamp = StampClient::Stamp.create(name: name)
+    stamp.set_permissions_to(convert_permissions)
+    true
+  rescue StandardError => e
     false
   end
 
   def update_objects
-    ActiveRecord::Base.transaction do
-      stamp = StampClient::Stamp.find_with_permissions(id).first
-      stamp.update(name: name)
-      stamp.set_permissions_to(convert_permissions)
-      true
-    end
-  rescue
+    stamp = StampClient::Stamp.find_with_permissions(id).first
+    stamp.update(name: name)
+    stamp.set_permissions_to(convert_permissions)
+    true
+  rescue StandardError => e
     false
   end
 
