@@ -25,7 +25,7 @@ ADD https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.s
 RUN chmod u+x /utils/wait-for-it.sh
 
 # Add the docker-entrypoint file to utils
-ADD https://raw.githubusercontent.com/pjvv/docker-entrypoint/master/docker-entrypoint.sh /utils/docker-entrypoint.sh
+ADD https://raw.githubusercontent.com/pjvv/docker-entrypoint/master/docker-entrypoint-no-db.sh /utils/docker-entrypoint.sh
 RUN chmod u+x /utils/docker-entrypoint.sh
 
 # Add all remaining contents to the code directory
