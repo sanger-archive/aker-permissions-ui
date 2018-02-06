@@ -18,7 +18,7 @@ gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 gem 'therubyracer', platforms: :ruby
-gem 'pg'
+gem 'pg', '~> 0.18' # pg version 1.0.0 is not compatible with Rails 5.1.4
 gem 'zipkin-tracer'
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.2'
