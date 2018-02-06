@@ -18,7 +18,7 @@ RSpec.describe DeputiesController, type: :controller do
   let(:login_url) { Rails.configuration.login_url+'?'+{redirect_url: request.original_url}.to_query }
 
   before do
-    request.cookies[:aker_user_jwt] = jwt if jwt
+    request.cookies[:"aker_jwt_#{Rails.env}"] = jwt if jwt
   end
 
   describe '#index' do

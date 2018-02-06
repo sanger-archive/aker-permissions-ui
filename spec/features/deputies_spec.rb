@@ -25,7 +25,7 @@ RSpec.feature "Deputies", type: :feature do
   end
 
   before do
-    set_cookie(:aker_user_jwt, jwt) if jwt
+    set_cookie(:"aker_jwt_#{Rails.env}", jwt) if jwt
   end
 
   describe 'Deputiess' do
