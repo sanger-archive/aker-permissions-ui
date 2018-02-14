@@ -31,3 +31,10 @@
 
 en:
   hello: "Hello world"
+  helpers:
+    label:
+      stamp:
+        user_editors: "Users who can edit biomaterial metadata"
+        group_editors: "Groups that can edit biomaterial metadata"
+        user_consumers: "Users who can order work on biomaterials"
+        group_consumers: "Groups that can order work on biomaterials"

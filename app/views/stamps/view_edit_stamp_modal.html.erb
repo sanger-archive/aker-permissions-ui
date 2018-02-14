@@ -1,0 +1,20 @@
+<div class="modal fade" id="viewEditStamp" role="dialog" style='top:100px;'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                 <h4 class="modal-title"><%= !readonly ? "Edit Stamp" : "View Stamp" %></h4>
+            </div>
+            <div class="modal-body">
+            <% unless @stampform.nil? %>
+              <%= bootstrap_form_for(@stampform, url: stamp_path(@stamp), method: :put, as: :stamp) do |f| %>
+                <%= render "stamp_form", f: f, readonly: readonly %>
+                <% if !readonly %>
+                  <%= f.submit 'Update', class: "btn btn-primary" %>
+                <% end %>
+              <% end %>
+            <% end %>
+            </div>
+        </div>
+    </div>
+</div>

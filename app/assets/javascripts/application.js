@@ -10,6 +10,45 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require rails-ujs
+//= require jquery
+//= require jquery_ujs
 //= require turbolinks
+//= require bootstrap-sprockets
 //= require_tree .
+
+$(document).on("turbolinks:load", function() {
+  $("a[data-remote]").on("ajax:success", function (e, data, status, xhr) {
+    $("#viewEditStamp").html($("#viewEditStamp", xhr.responseText).html());
+    aker.attachSelectize($("#viewEditStamp"));
+  }).on("ajax:error", function(e, xhr, status, error) {
+    $("#viewEditStamp").append("<p>ERROR</p>");
+  });
+
+  $("#viewEditStamp").on('show.bs.modal', function(e) {
+    $("#viewEditStamp").html('');
+  })
+
+  aker.attachSelectize(document.body);
+});
+
+$(document).on("turbolinks:load", function() {
+  aker.attachSelectize(document.body);
+});
+
+window.aker = {};
+window.aker.attachSelectize = function(node) {
+  $("[data-behavior~=selectize]", node).each(window.aker.selectize_element);
+};
+window.aker.selectize_element = function(index, el) {
+  $(el).selectize({
+    plugins: ['remove_button'],
+    delimiter: ',',
+    persist: false,
+    create: function(input) {
+      return {
+          value: input,
+          text: input
+      }
+    }
+  });
+};

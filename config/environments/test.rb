@@ -39,4 +39,19 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+  config.fake_ldap = true
+
+  config.stamp_url = 'http://localhost:7000/api/v1/'
+
+  config.jwt_secret_key = 'test'
+
+  config.login_url = 'http://log.in.url'
+  config.logout_url = 'http://log.out.url'
+
+  config.urls = { submission: "",
+                  permissions: "",
+                  sets: "",
+                  projects: "",
+                  work_orders: "" }
+
 end
