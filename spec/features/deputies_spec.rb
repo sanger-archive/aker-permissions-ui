@@ -47,7 +47,7 @@ RSpec.feature "Deputies", type: :feature do
 
       it 'will let you create a new deputy' do
         visit deputies_path
-        expect(page).to have_content('Assign Sample Guardian Deputies')
+        expect(page).to have_content('Add deputy')
       end
 
       it 'shows Delete for deputies of the current user' do

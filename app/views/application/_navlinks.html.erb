@@ -1,10 +1,15 @@
 <ul class="nav navbar-nav">
   <li>
-    <%= link_to 'Stamps', stamps_path,
-          id: ("current-page-#{Rails.env.downcase}" if (params[:controller] == 'stamps' && params[:action] != 'show')) %>
-  </li>
-  <li>
     <%= link_to 'Deputies', deputies_path,
           id: ("current-page-#{Rails.env.downcase}" if params[:controller] == 'deputies') %>
   </li>
+
+<!--
+
+  <li>
+    <%= link_to 'Stamps', stamps_path,
+          id: ("current-page-#{Rails.env.downcase}" if (params[:controller] == 'stamps' && params[:action] != 'show')) %>
+  </li>
+
+-->
 </ul>
