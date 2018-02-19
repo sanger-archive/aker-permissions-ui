@@ -15,7 +15,7 @@ class StampsController < ApplicationController
     else
       flash[:danger] = "Failed to create stamp: #{stamp_form.errors.full_messages}"
     end
-    redirect_to root_path
+    redirect_to stamps_path
   end
 
   def show
@@ -33,7 +33,7 @@ class StampsController < ApplicationController
     else
       flash[:danger] = "Failed to update stamp: #{stamp_form.errors.full_messages}"
     end
-    redirect_to root_path
+    redirect_to stamps_path
   end
 
   def destroy
@@ -42,7 +42,7 @@ class StampsController < ApplicationController
     else
       flash[:danger] = "Failed to delete stamp"
     end
-    redirect_to root_path
+    redirect_to stamps_path
   end
 
 private

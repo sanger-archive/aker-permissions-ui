@@ -1,10 +1,9 @@
 <div class="row">
   <div class="col-md-12">
     <p>
-      Use this interface to assign deputies (users or groups) who will be able to apply and unapply
-      stamps to material.
+      Use this interface to assign deputies (users or groups) who will share guardianship of your material.
     </p>
-    <%= link_to 'Assign Sample Guardian Deputies', new_deputy_path, { remote: true,
+    <%= link_to 'Add deputy', new_deputy_path, { remote: true,
                                                       class: 'btn btn-success vcenter',
                                                       'data-target': "#createDeputy",
                                                       'data-toggle': "modal" } %>
