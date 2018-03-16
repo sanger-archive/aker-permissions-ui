@@ -39,16 +39,16 @@ RSpec.feature "Stamps", type: :feature do
         owned_stamps = double('owned stamps', all: [stamp1])
         allow(StampClient::Stamp).to receive(:where).with({owner_id: 'jeff'}).and_return(owned_stamps)
 
-        visit root_path
+        visit stamps_path
       end
 
       it 'shows all stamps' do
-        expect(page).to have_current_path(root_path)
+        expect(page).to have_current_path(stamps_path)
         expect(page).to have_selector('tr', count: @all_stamps.size+1)
       end
 
       it 'will let you create a new stamp' do
-        visit root_path
+        visit stamps_path
         expect(page).to have_content('Create New Stamp')
       end
 
@@ -77,7 +77,7 @@ RSpec.feature "Stamps", type: :feature do
         allow(StampClient::Stamp).to receive(:where).with({owner_id: 'jeff'}).and_return(owned_stamps)
         allow(StampClient::Stamp).to receive(:find_with_permissions).and_return([@stamp2])
 
-        visit root_path
+        visit stamps_path
       end
 
       it 'shows the view modal when you click on View' do
@@ -100,7 +100,7 @@ RSpec.feature "Stamps", type: :feature do
         allow(StampClient::Stamp).to receive(:where).with({owner_id: 'jeff'}).and_return(owned_stamps)
         allow(StampClient::Stamp).to receive(:find_with_permissions).and_return([@stamp1])
 
-        visit root_path
+        visit stamps_path
       end
 
       it 'shows the edit modal when you click on Edit' do
@@ -123,7 +123,7 @@ RSpec.feature "Stamps", type: :feature do
         allow(StampClient::Stamp).to receive(:where).with({owner_id: 'jeff'}).and_return(owned_stamps)
         allow(StampClient::Stamp).to receive(:find_with_permissions).and_return([@stamp1])
 
-        visit root_path
+        visit stamps_path
       end
 
       it 'shows the edit modal when you click on Edit' do
@@ -136,9 +136,9 @@ RSpec.feature "Stamps", type: :feature do
         allow(StampClient::Stamp).to receive(:all).and_return([@new_stamp, @stamp2])
 
         click_link("Edit")
-        fill_in('Name', :with => 'newstampname')
+        fill_in('Name', with: 'newstampname')
         click_button("Update")
-        expect(page).to have_current_path(root_path)
+        expect(page).to have_current_path(stamps_path)
         expect(page).to have_content('newstampname')
         expect(page).not_to have_content('stamp1')
       end
@@ -154,7 +154,7 @@ RSpec.feature "Stamps", type: :feature do
         owned_stamps = double('owned stamps', all: [@stamp1])
         allow(StampClient::Stamp).to receive(:where).with({owner_id: 'jeff'}).and_return(owned_stamps)
 
-        visit root_path
+        visit stamps_path
       end
 
       it 'shows delete for stamps that the current user owns' do
@@ -166,7 +166,7 @@ RSpec.feature "Stamps", type: :feature do
         allow(StampClient::Stamp).to receive(:find_with_permissions).and_return([@stamp1])
         allow(@stamp1).to receive(:destroy).and_return true
         click_link('Delete')
-        expect(page).to have_current_path(root_path)
+        expect(page).to have_current_path(stamps_path)
         page.has_content?('Stamp deleted')
       end
     end
