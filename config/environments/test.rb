@@ -48,10 +48,10 @@ Rails.application.configure do
   config.login_url = 'http://log.in.url'
   config.logout_url = 'http://log.out.url'
 
-  config.urls = { submission: "",
+  config.urls = { reception: "",
                   permissions: "",
                   sets: "",
                   projects: "",
-                  work_orders: "" }
+                  work: "" }
 
 end
