@@ -34,9 +34,9 @@ class DeputyForm
 
       # Return true if all users and groups have been saved
       true
-    rescue
+    rescue JsonApiClient::Errors::ApiError => e
       # TODO: Improve error handling and displaying
-      errors[:base] << "unidentified server error"
+      errors[:base] << e.env.body["errors"][0]["detail"]
 
       # Return false if ActiveRecord was not able to save the records correctly
       false
