@@ -65,11 +65,9 @@ RSpec.describe DeputiesController, type: :controller do
     end
 
     it 'should show error flash when StampClient fails to create deputy' do
-      expect(StampClient::Deputy).to receive(:create).and_return false
-
-      post :create, params: { deputy: { user_deputies: @deputy.deputy } }
-
-      expect(flash[:danger]).to match('Failed to create deputy')
+      allow(StampClient::Deputy).to receive(:create).and_raise(JsonApiClient::Errors::ApiError, double("env", body: ActiveSupport::HashWithIndifferentAccess.new({ "errors": ["detail": "Error!"] })))
+      post :create, params: { deputy: { user_deputies: "ac42@sanger.ac.uk" } }
+      expect(flash[:danger]).to match('Failed to create deputy: Error!')
     end
 
     it 'should show success flash when StampClient creates stamp' do
