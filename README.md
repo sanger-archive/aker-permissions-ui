@@ -1,5 +1,7 @@
 # Aker - Material Permissions Manager
 
+[![Build Status](https://travis-ci.org/sanger/aker-permissions-ui.svg?branch=devel)](https://travis-ci.org/sanger/aker-permissions-ui)
+
 An application to manage the permissions or "stamps" applied to materials as well as deputies assigned to users.
 
 # Installation
