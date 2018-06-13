@@ -1,6 +1,13 @@
-language: ruby
 git:
   depth: false
+  submodules: false
+branches:
+  only:
+    - devel
+    - wip
+    - uat
+    - master
+language: ruby
 env:
   global:
     - CC_TEST_REPORTER_ID=be9046db54d0fa14b8b74b6f210039250fae4c1b299e52b475c90af72159dc93
