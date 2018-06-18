@@ -16,7 +16,6 @@ class DeputiesController < ApplicationController
     if deputy_form.save
       flash[:success] = "Deputy created"
     else
-      # TODO: Improve error handling and displaying
       flash[:danger] = "Failed to create deputy: #{deputy_form.errors.full_messages[0]}"
     end
 
@@ -31,7 +30,6 @@ class DeputiesController < ApplicationController
     if @deputy.destroy
       flash[:success] = "Deputy deleted"
     else
-      # TODO: Improve error handling and displaying
       flash[:danger] = "Failed to delete deputy"
     end
 

@@ -34,9 +34,8 @@ class DeputyForm
 
       # Return true if all users and groups have been saved
       true
-    rescue
-      # TODO: Improve error handling and displaying
-      errors[:base] << "unidentified server error"
+    rescue JsonApiClient::Errors::ApiError => e
+      errors[:base] << e.env.body["errors"][0]["detail"]
 
       # Return false if ActiveRecord was not able to save the records correctly
       false
@@ -52,11 +51,7 @@ class DeputyForm
           deputy = deputy.strip.downcase
           deputy += '@sanger.ac.uk' unless deputy.include?('@')
         end
-
-        deputy = StampClient::Deputy.create({deputy: deputy})
-
-        # TODO: handle errors correctly
-        raise 'unable to save deputy' if !deputy
+        deputy = StampClient::Deputy.create(deputy: deputy)
       end
     end
 
