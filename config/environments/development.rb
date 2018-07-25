@@ -63,10 +63,10 @@ Rails.application.configure do
   config.login_url = '#'
   config.logout_url = '#'
 
-  config.urls = { submission: "",
+  config.urls = { reception: "",
                   permissions: "",
                   sets: "",
                   projects: "",
-                  work_orders: "" }
+                  work: "" }
 
 end
